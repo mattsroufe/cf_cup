@@ -1,0 +1,8 @@
+<h1>Matches</h1>
+
+<% @matches.each do |match| %>
+  <%= match.teams[0].players.pluck(:last_name).join('/') %>
+  <p>vs</p>
+  <%= match.teams[1].players.pluck(:last_name).join('/') %>
+<% end %>
+
