@@ -10,8 +10,14 @@
       </ul>
     </div>
   <% end %>
-
   <div>
+    <% (player.attributes.keys - ['id', 'created_at', 'updated_at']).each do |attribute| %>
+      <p>
+      <%= form.label attribute %>
+      <br>
+      <%= form.text_area attribute %>
+      </p>
+    <% end %>
     <%= form.submit %>
   </div>
 <% end %>
