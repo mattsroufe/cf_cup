@@ -1,14 +1,15 @@
+<p style="color: green"><%= notice %></p>
+
 <h1>Players</h1>
-<table>
-  <tr>
-    <th>Username</th>
-    <th>First name</th>
-    <th>Last name</th>
+
+<div id="players">
   <% @players.each do |player| %>
-    <tr>
-      <td><%= player.username %></td>
-      <td><%= player.first_name %></td>
-      <td><%= player.last_name %></td>
-    </tr>
+    <div style="display:flex">
+    <%= render player %>&emsp;
+    <%= link_to "Show this player", player %>
+    </div>
+    <br>
   <% end %>
-</table>
+</div>
+
+<%= link_to "New player", new_player_path %>
