@@ -1,2 +1,5 @@
 <div id="<%= dom_id match %>">
+  <%= match.teams[0].players.pluck(:last_name).join('/') %>
+  <span> vs </span>
+  <%= match.teams[1].players.pluck(:last_name).join('/') %>
 </div>
