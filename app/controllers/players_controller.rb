@@ -65,6 +65,6 @@ class PlayersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def player_params
-      params.fetch(:player, {}).permit(*params[:player].keys)
+      params.fetch(:player, {}).permit!
     end
 end

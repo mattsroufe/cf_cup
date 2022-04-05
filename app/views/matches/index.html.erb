@@ -1,8 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
 <h1>Matches</h1>
 
-<% @matches.each do |match| %>
-  <%= match.teams[0].players.pluck(:last_name).join('/') %>
-  <p>vs</p>
-  <%= match.teams[1].players.pluck(:last_name).join('/') %>
-<% end %>
+<div id="matches">
+  <% @matches.each do |match| %>
+    <%= render match %>
+    <p>
+      <%= link_to "Show this match", match %>
+    </p>
+  <% end %>
+</div>
 
+<%= link_to "New match", new_match_path %>
