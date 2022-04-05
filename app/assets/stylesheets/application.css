@@ -13,6 +13,9 @@
  *= require_tree .
  *= require_self
  */
+
+@import url(https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto+Condensed:wght@300;400&display=swap);
+
 body {
   font-family: 'Roboto Condensed', sans-serif;
   background-color: rgb(255, 193, 224);
