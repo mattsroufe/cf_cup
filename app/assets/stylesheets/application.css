@@ -12,7 +12,8 @@
  *
  *= require_tree .
  *= require_self
- */
+*/
+
 body {
   font-family: 'Roboto Condensed', sans-serif;
   background-color: rgb(255, 193, 224);

@@ -1,14 +1,12 @@
 <p style="color: green"><%= notice %></p>
 
-<h1>Players</h1>
+<h1 class="logo">Players</h1>
 
-<div id="players">
+<div id="players" style="background:white">
   <% @players.each do |player| %>
-    <div style="display:flex">
-    <%= render player %>&emsp;
-    <%= link_to "Show this player", player %>
-    </div>
-    <br>
+    <%= link_to player, style: "display:flex; padding:8px; border-bottom:1px solid lightgray; text-decoration:none; color:inherit" do %>
+      <%= render player %>
+    <% end %>
   <% end %>
 </div>
 
