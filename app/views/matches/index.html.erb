@@ -2,15 +2,51 @@
 
 <h1 class="logo">Matches</h1>
 
-<div id="matches" style="background:white">
+<div id="matches">
   <% @matches.each do |match| %>
-    <%= link_to "Show this match", match %>
-    <% match.teams.each do |team| %>
-      <%= link_to "Show this team", team %>
-      <% team.players.each do |player| %>
-        <%= link_to player, style: "display:flex; padding:8px; border-bottom:1px solid lightgray; text-decoration:none; color:inherit" do %>
-          <%= render player %>
-        <% end %>
+    <%#= link_to "Show this match", match %>
+    <%= content_tag :div, style: "background-color: white; padding: 16px 0; margin: 16px 8px; border-radius: 8px; -webkit-box-shadow: 3px 2px 10px -2px #464242; 
+box-shadow: 3px 2px 10px -2px #464242;" do %>
+      <% match.teams[0].tap do |team| %>
+        <div style="display:flex; justify-content:space-around;" >
+          <% team.players[0].tap do |player| %>
+            <%# = link_to player, style: "padding:8px; text-decoration:none; color:inherit" do %>
+              <%= render player %>
+            <%# end %>
+          <div style="display:flex; flex-direction:column; justify-content:center">
+            <div><%= player.last_name %>
+          <% end %>
+            /
+            <%#= link_to team.name, team %>
+          <% team.players[1].tap do |player| %>
+            <%= player.last_name %></div>
+          </div>
+            <%= link_to player, style: "display:flex; padding:8px; text-decoration:none; color:inherit" do %>
+              <%= render player %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+      <div style="text-align:center">vs</div>
+      <% match.teams[1].tap do |team| %>
+        <div style="display:flex; justify-content:space-around;" >
+          <% team.players[0].tap do |player| %>
+            <%= link_to player, style: "padding:8px; text-decoration:none; color:inherit" do %>
+              <%= render player %>
+            <% end %>
+          <div style="display:flex; flex-direction:column; justify-content:center">
+            <div><%= player.last_name %>
+          <% end %>
+            /
+            <%#= link_to team.name, team %>
+          <% team.players[1].tap do |player| %>
+            <%= player.last_name %></div>
+          </div>
+            <%= link_to player, style: "display:flex; padding:8px; text-decoration:none; color:inherit" do %>
+              <%= render player %>
+            <% end %>
+          <% end %>
+        </div>
       <% end %>
     <% end %>
   <% end %>
