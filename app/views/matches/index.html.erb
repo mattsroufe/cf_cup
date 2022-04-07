@@ -1,13 +1,18 @@
 <p style="color: green"><%= notice %></p>
 
-<h1>Matches</h1>
+<h1 class="logo">Matches</h1>
 
-<div id="matches">
+<div id="matches" style="background:white">
   <% @matches.each do |match| %>
-    <%= render match %>
-    <p>
-      <%= link_to "Show this match", match %>
-    </p>
+    <%= link_to "Show this match", match %>
+    <% match.teams.each do |team| %>
+      <%= link_to "Show this team", team %>
+      <% team.players.each do |player| %>
+        <%= link_to player, style: "display:flex; padding:8px; border-bottom:1px solid lightgray; text-decoration:none; color:inherit" do %>
+          <%= render player %>
+        <% end %>
+      <% end %>
+    <% end %>
   <% end %>
 </div>
 
