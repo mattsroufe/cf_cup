@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :holes
   resources :match_hole_player_scores
   get 'home/index'
   resources :match_teams

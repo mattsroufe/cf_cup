@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @hole %>
+
+<div>
+  <%= link_to "Edit this hole", edit_hole_path(@hole) %> |
+  <%= link_to "Back to holes", holes_path %>
+
+  <%= button_to "Destroy this hole", @hole, method: :delete %>
+</div>
