@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Match hole player scores</h1>
+
+<div id="match_hole_player_scores">
+  <% @match_hole_player_scores.each do |match_hole_player_score| %>
+    <%= render match_hole_player_score %>
+    <p>
+      <%= link_to "Show this match hole player score", match_hole_player_score %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New match hole player score", new_match_hole_player_score_path %>

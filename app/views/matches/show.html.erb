@@ -1,7 +1,18 @@
 <p style="color: green"><%= notice %></p>
 
+<h2 style="margin-top:0; text-align:center"><%= @match.date.strftime('%-d %b') %> - <%= @match.course.name %></h2>
 <%= render @match %>
 
+
+<h2 sytle="text-align:center">
+  Scorecard
+</h2>
+
+<table>
+  <% (1..18).each do |i| %>
+    <tr><td><%= i %></td></tr>
+  <% end %>
+</table>
 <div>
   <%= link_to "Edit this match", edit_match_path(@match) %> |
   <%= link_to "Back to matches", matches_path %>

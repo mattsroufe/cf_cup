@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  match_id: 1
+  hole_id: 1
+  player_id: 1
+  score: 1
+
+two:
+  match_id: 1
+  hole_id: 1
+  player_id: 1
+  score: 1
