@@ -1,5 +1,36 @@
-<div id="<%= dom_id match %>">
-  <%= match.teams[0].players.pluck(:last_name).join('/') %>
-  <span> vs </span>
-  <%= match.teams[1].players.pluck(:last_name).join('/') %>
-</div>
+<%= content_tag :div, id: dom_id(match), style: "background-color: white; padding: 16px 0; margin: 16px 8px; border-radius: 8px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" do %>
+  <% match.teams[0].tap do |team| %>
+    <div style="display:flex; justify-content:space-around;" >
+      <% team.players[0].tap do |player| %>
+          <%= render player %>
+      <div style="display:flex; flex-direction:column; justify-content:center">
+        <div><%= player.username %>
+      <% end %>
+        /
+        <%#= link_to team.name, team %>
+      <% team.players[1].tap do |player| %>
+        <%= player.username %></div>
+      </div>
+        <%= render player %>
+      <% end %>
+    </div>
+  <% end %>
+  <div style="text-align:center">vs</div>
+  <% match.teams[1].tap do |team| %>
+    <div style="display:flex; justify-content:space-around;" >
+      <% team.players[0].tap do |player| %>
+        <%= render player %>
+      <div style="display:flex; flex-direction:column; justify-content:center">
+        <div><%= player.username %>
+      <% end %>
+        /
+        <%#= link_to team.name, team %>
+      <% team.players[1].tap do |player| %>
+        <%= player.username %></div>
+      </div>
+          <%= render player %>
+      <% end %>
+    </div>
+  <% end %>
+  <%= render match.course %>
+<% end %>
