@@ -5,9 +5,7 @@ namespace :export do
     klasses.each do |klass|
       klass.all.each do |model| 
         excluded_keys = ['created_at', 'updated_at', 'id'] 
-        serialized = model
-          .serializable_hash
-          .delete_if{|key,value| excluded_keys.include?(key)} 
+        serialized = model.as_json.except(*excluded_keys)
         puts "#{klass.name}.create(#{serialized})"
       end 
     end 
