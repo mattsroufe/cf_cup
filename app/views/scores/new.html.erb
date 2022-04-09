@@ -1,6 +1,10 @@
-<h1>New score</h1>
+<p style="color: green"><%= notice %></p>
+
+<h1 class="logo" style="margin-bottom:0">No. <%= @hole.number %></h1>
+<h3 style="text-align:center; margin: 0 0 24px"><%= @match.course.name %></h3>
 
 <% @players.each do |player| %>
+  <div style="display:flex; justify-content: space-evenly">
   <%= render player %>
   <% if score = player.scores.find_by(match_id: @score.match_id, hole_id: @score.hole_id) %>
     <%= render "form", score: score %>
@@ -8,11 +12,12 @@
     <% @score.player_id = player.id %>
     <%= render "form", score: @score %>
   <% end %>
+  </div>
 <% end %>
 
 
 <br>
 
-<div>
-  <%= link_to "Back to scores", scores_path %>
+<div style="text-align:center">
+  <%= link_to "Back to scorecard", scores_path(match_id: @match.id) %>
 </div>

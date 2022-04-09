@@ -1,4 +1,4 @@
-<%= form_with(model: score) do |form| %>
+<%= form_with(model: score, html: { style: "display: flex;flex-direction: column;justify-content: center;"}) do |form| %>
   <% if score.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(score.errors.count, "error") %> prohibited this score from being saved:</h2>
@@ -11,27 +11,13 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :match_id, style: "display: block" %>
-    <%= form.number_field :match_id %>
-  </div>
+  <%= form.hidden_field :match_id %>
+  <%= form.hidden_field :hole_id %>
+  <%= form.hidden_field :player_id %>
 
   <div>
-    <%= form.label :hole_id, style: "display: block" %>
-    <%= form.number_field :hole_id %>
-  </div>
-
-  <div>
-    <%= form.label :player_id, style: "display: block" %>
-    <%= form.number_field :player_id %>
-  </div>
-
-  <div>
-    <%= form.label :score, style: "display: block" %>
-    <%= form.number_field :score %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+    <%= form.label :score %>
+    <%= form.number_field :score, style: "max-width: 50px;", min: "1", step: "1" %>
+    <%= form.submit "Save" %>
   </div>
 <% end %>

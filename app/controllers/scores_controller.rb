@@ -13,8 +13,10 @@ class ScoresController < ApplicationController
 
   # GET /scores/new
   def new
+    @match = Match.find(score_params[:match_id])
+    @hole = Hole.find(score_params[:hole_id])
     @score = Score.new(score_params)
-    @players = Player.where(id: params[:players])
+    @players = @match.teams.flat_map(&:players)
   end
 
   # GET /scores/1/edit
@@ -27,7 +29,7 @@ class ScoresController < ApplicationController
 
     respond_to do |format|
       if @score.save
-        format.html { redirect_to scores_path(match_id: @score.match_id, hole_id: @score.hole_id), notice: "Score was successfully created." }
+        format.html { redirect_to new_score_path(score: { match_id: @score.match_id, hole_id: @score.hole_id }), notice: "Score was successfully created." }
         format.json { render :show, status: :created, location: @score }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -40,7 +42,7 @@ class ScoresController < ApplicationController
   def update
     respond_to do |format|
       if @score.update(score_params)
-        format.html { redirect_to scores_path(match_id: @score.match_id, hole_id: @score.hole_id), notice: "Score was successfully updated." }
+        format.html { redirect_to new_score_path(score: { match_id: @score.match_id, hole_id: @score.hole_id }), notice: "Score was successfully updated." }
         format.json { render :show, status: :ok, location: @score }
       else
         format.html { render :edit, status: :unprocessable_entity }
