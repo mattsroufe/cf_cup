@@ -30,15 +30,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_08_083737) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "match_hole_player_scores", force: :cascade do |t|
-    t.integer "match_id"
-    t.integer "hole_id"
-    t.integer "player_id"
-    t.integer "score"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "match_teams", force: :cascade do |t|
     t.integer "match_id"
     t.integer "team_id"
@@ -64,6 +55,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_08_083737) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "team_id"
+  end
+
+  create_table "scores", force: :cascade do |t|
+    t.integer "match_id"
+    t.integer "hole_id"
+    t.integer "player_id"
+    t.integer "score"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "teams", force: :cascade do |t|

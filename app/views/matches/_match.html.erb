@@ -1,3 +1,4 @@
+<%= link_to scores_path(match_id: match.id) do %>
 <%= content_tag :div, id: dom_id(match), style: "text-align:center; background-color: white; padding: 16px 0; margin: 16px 8px; border-radius: 8px; box-shadow: var(--box-shadow)" do %>
   <% match.teams[0].tap do |team| %>
     <div style="display:flex; justify-content:space-around;" >
@@ -32,4 +33,5 @@
       <% end %>
     </div>
   <% end %>
+<% end %>
 <% end %>

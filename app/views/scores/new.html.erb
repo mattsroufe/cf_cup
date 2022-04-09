@@ -1,0 +1,18 @@
+<h1>New score</h1>
+
+<% @players.each do |player| %>
+  <%= render player %>
+  <% if score = player.scores.find_by(match_id: @score.match_id, hole_id: @score.hole_id) %>
+    <%= render "form", score: score %>
+  <% else %>
+    <% @score.player_id = player.id %>
+    <%= render "form", score: @score %>
+  <% end %>
+<% end %>
+
+
+<br>
+
+<div>
+  <%= link_to "Back to scores", scores_path %>
+</div>

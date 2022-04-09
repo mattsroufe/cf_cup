@@ -1,2 +1,0 @@
-class MatchHolePlayerScore < ApplicationRecord
-end

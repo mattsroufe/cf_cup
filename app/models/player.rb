@@ -1,4 +1,4 @@
 class Player < ApplicationRecord
   belongs_to :team
-  has_many :match_hole_player_scores
+  has_many :scores
 end

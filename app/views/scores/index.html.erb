@@ -1,0 +1,33 @@
+<p style="color: green"><%= notice %></p>
+
+<h1 class="logo">Scores</h1>
+
+<div style="background:white; margin: 0 8px; overflow-x:scroll; display:flex; flex-direction:column; border-radius: 8px; box-shadow: var(--box-shadow); ">
+<table style="padding: 8px; border-collapse:collapse">
+  <thead>
+    <tr>
+      <th>Hole</th>
+      <th>Stroke</th>
+      <th>Par</th>
+      <% @match.teams.flat_map(&:players).each do |player| %>
+        <th>
+          <%= image_tag "#{player.username}.png", height: 32, width: 32, style: "border-radius:16px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
+        </th>
+      <% end %>
+    </tr>
+  </thead>
+  <% @match.course.holes.order(:number).each do |hole| %>
+    <tr>
+      <td style="text-align:center; border-top: 1px solid lightgray;"><%= link_to hole.id, new_score_path(score: { match_id: @match.id, hole_id: hole.id }, players: @match.teams.flat_map(&:players).map(&:id)) %></td>
+      <td style="text-align:center; border-top: 1px solid lightgray;"><%= hole.stroke %></td>
+      <td style="text-align:center; border-top: 1px solid lightgray;"><%= hole.par %></td>
+      <% @match.teams.flat_map(&:players).each do |player| %>
+        <td style="text-align:center; border-top: 1px solid lightgray;">
+          <%= player.scores.find_by(match_id: @match.id, hole_id: hole.id)&.score %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+</div>
+<div>

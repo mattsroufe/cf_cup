@@ -1,10 +1,10 @@
-<%= form_with(model: match_hole_player_score) do |form| %>
-  <% if match_hole_player_score.errors.any? %>
+<%= form_with(model: score) do |form| %>
+  <% if score.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(match_hole_player_score.errors.count, "error") %> prohibited this match_hole_player_score from being saved:</h2>
+      <h2><%= pluralize(score.errors.count, "error") %> prohibited this score from being saved:</h2>
 
       <ul>
-        <% match_hole_player_score.errors.each do |error| %>
+        <% score.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
       </ul>
