@@ -6,7 +6,7 @@
   <% @matches.group_by(&:date).each do |date, matches| %>
     <h3 style="margin-top:0; text-align:center"><%= date.strftime('%-d %b') %> - <%= matches.first.course.name %></h3>
     <% matches.each do |match| %>
-      <%= link_to match, style: "text-decoration:none; color:inherit" do %>
+      <%= link_to scores_path(match_id: match.id), style: "text-decoration:none; color:inherit" do %>
         <%= render match %>
       <% end %>
     <% end %>
