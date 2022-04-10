@@ -21,7 +21,10 @@ class MatchesController < ApplicationController
 
   # POST /matches or /matches.json
   def create
-    @match = Match.new(match_params)
+    @match = Match.new(match_params.except(:home_team_id, :away_team_id)) do |match|
+      match.teams << Team.find(match_params[:home_team_id])
+      match.teams << Team.find(match_params[:away_team_id])
+    end
 
     respond_to do |format|
       if @match.save
@@ -36,8 +39,12 @@ class MatchesController < ApplicationController
 
   # PATCH/PUT /matches/1 or /matches/1.json
   def update
+    MatchTeam.where(match_id: @match.id).destroy_all
+    @match.teams << Team.find(match_params[:home_team_id])
+    @match.teams << Team.find(match_params[:away_team_id])
+ 
     respond_to do |format|
-      if @match.update(match_params)
+      if @match.update(match_params.except(:home_team_id, :away_team_id))
         format.html { redirect_to match_url(@match), notice: "Match was successfully updated." }
         format.json { render :show, status: :ok, location: @match }
       else
@@ -65,6 +72,6 @@ class MatchesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def match_params
-      params.fetch(:match, {})
+      params.fetch(:match, {}).permit(:course_id, :home_team_id, :away_team_id, :date)
     end
 end

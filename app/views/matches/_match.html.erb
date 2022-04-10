@@ -2,15 +2,12 @@
   <% match.teams[0].tap do |team| %>
     <div style="display:flex; justify-content:space-around;" >
       <% team.players[0].tap do |player| %>
-          <%= render player %>
-      <div style="display:flex; flex-direction:column; justify-content:center">
-        <div><%= player.username %>
+        <%= render player %>
       <% end %>
-        /
-        <%#= link_to team.name, team %>
-      <% team.players[1].tap do |player| %>
-        <%= player.username %></div>
+      <div style="display:flex; flex-direction:column; justify-content:center">
+        <%= team.name %>
       </div>
+      <% team.players[1].tap do |player| %>
         <%= render player %>
       <% end %>
     </div>
@@ -20,15 +17,12 @@
     <div style="display:flex; justify-content:space-around;" >
       <% team.players[0].tap do |player| %>
         <%= render player %>
-      <div style="display:flex; flex-direction:column; justify-content:center">
-        <div><%= player.username %>
       <% end %>
-        /
-        <%#= link_to team.name, team %>
-      <% team.players[1].tap do |player| %>
-        <%= player.username %></div>
+      <div style="display:flex; flex-direction:column; justify-content:center">
+        <%= team.name %>
       </div>
-          <%= render player %>
+      <% team.players[1].tap do |player| %>
+        <%= render player %>
       <% end %>
     </div>
   <% end %>

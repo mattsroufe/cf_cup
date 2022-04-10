@@ -13,7 +13,17 @@
 
   <div>
     <%= form.label :course_id, style: "display: block" %>
-    <%= form.number_field :course_id %>
+    <%= form.select :course_id, options_from_collection_for_select(Course.all, 'id', 'name') %>
+  </div>
+
+  <div>
+    <%= form.label :home_team_id, style: "display: block" %>
+    <%= form.select :home_team_id, options_from_collection_for_select(Team.all, 'id', 'name') %>
+  </div>
+
+  <div>
+    <%= form.label :away_team_id, style: "display: block" %>
+    <%= form.select :away_team_id, options_from_collection_for_select(Team.all, 'id', 'name') %>
   </div>
 
   <div>
