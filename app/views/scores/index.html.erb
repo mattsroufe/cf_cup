@@ -30,6 +30,14 @@
       <% end %>
     </tr>
   <% end %>
+  <tr>
+    <td style="text-align:center; border-top: 1px solid lightgray;">Total</td>
+    <td style="text-align:center; border-top: 1px solid lightgray;"></td>
+    <td style="text-align:center; border-top: 1px solid lightgray;"></td>
+    <% @match.teams.flat_map(&:players).each do |player| %>
+      <td style="text-align:center; border-top: 1px solid lightgray;"><%= player.scores.where(match_id: @match.id).sum(:score) %></td>
+    <% end %>
+  </tr>
 </table>
 </div>
 <div>
