@@ -1,3 +1,10 @@
-<div id="<%= dom_id player %>" style="text-align:center">
-  <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
-</div>
+<%= content_tag :div, id: dom_id(player), style: "background-color: white; padding: 16px 8px; margin: 16px 8px; border-radius: 8px; box-shadow: var(--box-shadow)" do %>
+  <%= image_tag "#{player.username}.png", height: 128, width: 128, style: "border-radius:64px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
+  <h2><%= player.first_name %> <%= player.last_name %></h2>
+  <h3>Strengths</h3>
+  <p><%= player.strengths %></p>
+  <h3>Weaknesses</h3>
+  <p><%= player.weaknesses %></p>
+  <h3>Best C F Cup moment</h3>
+  <p><%= player.best_moment %></p>
+<% end %>
