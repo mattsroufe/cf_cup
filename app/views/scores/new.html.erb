@@ -7,7 +7,7 @@
 <div style="background:white; margin: 8px; overflow-x:scroll; display:flex; flex-direction:column; border-radius: 8px; box-shadow: var(--box-shadow); ">
   <div style="display:flex; justify-content: space-between; margin: 8px">
   <%= link_to player do %>
-    <%= render player %>
+    <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
   <% end %>
   <% if score = player.scores.find_by(match_id: @score.match_id, hole_id: @score.hole_id) %>
     <%= render "form", score: score %>

@@ -3,13 +3,13 @@
   <% match.teams[0].tap do |team| %>
     <div style="display:flex; justify-content:space-around;" >
       <% team.players[0].tap do |player| %>
-        <%= render player %>
+        <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
       <% end %>
       <div style="display:flex; flex-direction:column; justify-content:center">
         <%= team.name %>
       </div>
       <% team.players[1].tap do |player| %>
-        <%= render player %>
+        <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
       <% end %>
     </div>
   <% end %>
@@ -17,13 +17,13 @@
   <% match.teams[1].tap do |team| %>
     <div style="display:flex; justify-content:space-around;" >
       <% team.players[0].tap do |player| %>
-        <%= render player %>
+        <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
       <% end %>
       <div style="display:flex; flex-direction:column; justify-content:center">
         <%= team.name %>
       </div>
       <% team.players[1].tap do |player| %>
-        <%= render player %>
+        <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
       <% end %>
     </div>
   <% end %>
