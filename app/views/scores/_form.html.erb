@@ -1,4 +1,4 @@
-<%= form_with(model: score, html: { style: "display: flex;flex-direction: column;justify-content: center;"}) do |form| %>
+<%= form_with(model: score, html: { style: "display: flex;flex-direction: column;justify-content: center;"}, format: :json) do |form| %>
   <% if score.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(score.errors.count, "error") %> prohibited this score from being saved:</h2>
@@ -15,9 +15,14 @@
   <%= form.hidden_field :hole_id %>
   <%= form.hidden_field :player_id %>
 
-  <div>
-    <%= form.label :score %>
-    <%= form.number_field :score, style: "max-width: 50px;", min: "1", step: "1" %>
-    <%= form.submit "Save" %>
+  <div style="display:flex;">
+    <div style="display:flex; flex-direction:column; justify-content:center;">
+      <%= form.label :score, for: dom_id(score) %>
+      <%= form.number_field :score, id: dom_id(score), style: "max-width: 50px;", min: "1", step: "1", data: { par: score.hole.par } %>
+    </div>
+    <div style="display:flex; flex-direction: column; margin-left: 8px;">
+      <%= button_tag "+", style: "margin-bottom: 4px; padding: 0; width: 40px; height: 40px; border-radius: 20px;", data: { target: dom_id(score) } %>
+      <%= button_tag "-", style: "margin: 0; padding: 0; width: 40px; height: 40px; border-radius: 20px;", data: { target: dom_id(score) } %>
+    </div>
   </div>
 <% end %>

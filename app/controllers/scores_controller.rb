@@ -15,7 +15,6 @@ class ScoresController < ApplicationController
   def new
     @match = Match.find(score_params[:match_id])
     @hole = Hole.find(score_params[:hole_id])
-    @score = Score.new(score_params)
     @players = @match.teams.flat_map(&:players)
   end
 

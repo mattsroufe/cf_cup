@@ -1,6 +1,7 @@
 <p style="color: green"><%= notice %></p>
 
 <h1 class="logo">Matches</h1>
+<%= render 'nav' %>
 
 <div id="matches">
   <% @matches.order(:date).each do |match| %>

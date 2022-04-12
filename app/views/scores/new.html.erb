@@ -4,19 +4,14 @@
 <h3 style="text-align:center; margin: 0 0 24px"><%= @match.course.name %></h3>
 
 <% @players.each do |player| %>
-<div style="background:white; margin: 8px; overflow-x:scroll; display:flex; flex-direction:column; border-radius: 8px; box-shadow: var(--box-shadow); ">
-  <div style="display:flex; justify-content: space-between; margin: 8px">
-  <%= link_to player do %>
-    <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
-  <% end %>
-  <% if score = player.scores.find_by(match_id: @score.match_id, hole_id: @score.hole_id) %>
-    <%= render "form", score: score %>
-  <% else %>
-    <% @score.player_id = player.id %>
-    <%= render "form", score: @score %>
-  <% end %>
+  <div style="background:white; margin: 8px; overflow-x:scroll; display:flex; flex-direction:column; border-radius: 8px; box-shadow: var(--box-shadow);">
+    <div style="display:flex; justify-content: space-between; margin: 8px">
+      <%= link_to player do %>
+        <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
+      <% end %>
+      <%= render "form", score: player.scores.find_or_create_by(match_id: @match.id, hole_id: @hole.id) %>
+    </div>
   </div>
-</div>
 <% end %>
 
 <br>
@@ -24,3 +19,23 @@
 <div style="text-align:center; margin-bottom:32px">
   <%= link_to "Back to scorecard", scores_path(match_id: @match.id) %>
 </div>
+
+<script>
+  document.querySelectorAll('[data-target]').forEach(el => {
+    el.addEventListener('click', e => {
+      const form = e.target.closest('form')
+      const input = form.querySelector(`#${e.target.dataset.target}`);
+      if (input.value.length > 0) {
+        input.value = e.target.innerText === '+' ? parseInt(input.value) + 1 : parseInt(input.value) - 1
+      } else {
+        input.value = input.dataset.par
+      }
+      const body = new FormData(form)
+      fetch(form.action, {
+        method: form.method, // or 'PUT'
+        body: body,
+      })
+      e.preventDefault()
+    })
+  })
+</script>
