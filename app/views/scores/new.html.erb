@@ -7,7 +7,7 @@
   <div style="background:white; margin: 8px; overflow-x:scroll; display:flex; flex-direction:column; border-radius: 8px; box-shadow: var(--box-shadow);">
     <div style="display:flex; justify-content: space-between; margin: 8px">
       <%= link_to player do %>
-        <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
+        <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: var(--box-shadow)" %>
       <% end %>
       <%= render "form", score: player.scores.find_or_create_by(match_id: @match.id, hole_id: @hole.id) %>
     </div>
@@ -53,9 +53,9 @@
     })
     form.querySelectorAll('[data-target]').forEach(button => {
       button.addEventListener('click', e => {
-        const input = form.querySelector(`#${e.target.dataset.target}`);
+        const input = form.querySelector(`#${button.dataset.target}`);
         if (input.value.length > 0) {
-          input.value = e.target.innerText === '+' ? parseInt(input.value) + 1 : parseInt(input.value) - 1
+          input.value = button.querySelector('use').getAttribute('xlink:href').split('-').splice(-1)[0] === 'plus' ? parseInt(input.value) + 1 : parseInt(input.value) - 1
         } else {
           input.value = input.dataset.par
         }

@@ -21,8 +21,16 @@
       <%= form.number_field :score, id: dom_id(score), style: "max-width: 50px;", min: "1", step: "1", data: { par: score.hole.par } %>
     </div>
     <div style="display:flex; flex-direction: column; margin-left: 8px;">
-      <%= button_tag "+", type: "button", style: "margin-bottom: 4px; padding: 0; width: 40px; height: 40px; border-radius: 20px;", data: { target: dom_id(score) } %>
-      <%= button_tag "-", type: "button", style: "margin: 0; padding: 0; width: 40px; height: 40px; border-radius: 20px;", data: { target: dom_id(score) } %>
+      <%= button_tag type: "button", style: "margin-bottom: 4px; padding: 0; width: 48px; height: 48px; background: none; border: none", data: { target: dom_id(score) } do %>
+        <svg width="40px" height="40px" style="fill: #851c85; box-shadow: var(--box-shadow); border-radius: 20px;">
+          <use xlink:href="<%= image_url 'solid.svg#circle-plus' %>"></use>
+        </svg>
+      <% end %>
+      <%= button_tag type: "button", style: "margin-bottom: 4px; padding: 0; width: 48px; height: 48px; background: none; border: none", data: { target: dom_id(score) } do %>
+        <svg width="40px" height="40px" style="fill: #39a084; box-shadow: var(--box-shadow); border-radius: 20px;">
+          <use xlink:href="<%= image_url 'solid.svg#circle-minus' %>"></use>
+        </svg>
+      <% end %>
     </div>
   </div>
 <% end %>
