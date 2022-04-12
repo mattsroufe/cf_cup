@@ -21,21 +21,47 @@
 </div>
 
 <script>
-  document.querySelectorAll('[data-target]').forEach(el => {
-    el.addEventListener('click', e => {
-      const form = e.target.closest('form')
-      const input = form.querySelector(`#${e.target.dataset.target}`);
-      if (input.value.length > 0) {
-        input.value = e.target.innerText === '+' ? parseInt(input.value) + 1 : parseInt(input.value) - 1
-      } else {
-        input.value = input.dataset.par
-      }
+  function debounce(func, wait, immediate) {
+    var timeout;
+    return function() {
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func.apply(context, args);
+    };
+  };
+  var emitChangeEvent = debounce(function (input) {
+    input.dispatchEvent(new Event('change'))
+  }, 300)
+
+  document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', e => {
       const body = new FormData(form)
       fetch(form.action, {
         method: form.method, // or 'PUT'
         body: body,
       })
       e.preventDefault()
+    })
+    form.querySelector('input[type="number"]').addEventListener('change', e => {
+      form.dispatchEvent(new Event('submit'));
+    })
+    form.querySelectorAll('[data-target]').forEach(button => {
+      button.addEventListener('click', e => {
+        const input = form.querySelector(`#${e.target.dataset.target}`);
+        if (input.value.length > 0) {
+          input.value = e.target.innerText === '+' ? parseInt(input.value) + 1 : parseInt(input.value) - 1
+        } else {
+          input.value = input.dataset.par
+        }
+        emitChangeEvent(input)
+        e.preventDefault()
+      })
     })
   })
 </script>
