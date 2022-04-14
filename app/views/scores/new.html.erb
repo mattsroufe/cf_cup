@@ -6,9 +6,12 @@
 <% @players.each do |player| %>
   <div style="background:white; margin: 8px; overflow-x:scroll; display:flex; flex-direction:column; border-radius: 8px; box-shadow: var(--box-shadow);">
     <div style="display:flex; justify-content: space-between; margin: 8px">
-      <%= link_to player do %>
-        <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: var(--box-shadow)" %>
-      <% end %>
+      <div style="display:flex; flex-direction: column; justify-content: flex-start">
+        <%= link_to player do %>
+          <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: var(--box-shadow)" %>
+        <% end %>
+        <div style="text-align:center; margin-top: 4px"><%= player.nick_name %></div>
+      </div>
       <%= render "form", score: player.scores.find_or_create_by(match_id: @match.id, hole_id: @hole.id) %>
     </div>
   </div>

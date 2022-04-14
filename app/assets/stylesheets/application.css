@@ -19,7 +19,7 @@
 }
 body {
   font-family: 'Roboto Condensed', sans-serif;
-  background-color: rgb(255, 193, 224);
+  background-color: #F5BAE0;
 }
 
 .logo {
@@ -45,4 +45,9 @@ body {
 
 td, th {
   padding: 8px;
+}
+
+button:active > svg {
+  box-shadow: none !important;
+  opacity: 0.6
 }
