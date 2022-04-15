@@ -49,3 +49,31 @@ button:active > svg {
   box-shadow: none !important;
   opacity: 0.6
 }
+
+.carousel-inner .carousel-item {
+  transition: transform 0.3s ease-in-out;
+}
+
+.carousel-control-next, .carousel-control-prev {
+  bottom: inherit;
+  top: 8px;
+  opacity: 1;
+}
+
+.carousel-control-prev {
+  left: 8px;
+  .carousel-control-prev-icon {
+    background: {
+      image: none;
+    }
+  }
+}
+
+.carousel-control-next {
+  right: 8px;
+  .carousel-control-next-icon {
+    background: {
+      image: none;
+    }
+  }
+}
