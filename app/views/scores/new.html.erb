@@ -37,6 +37,7 @@
 </div>
 <div style="display:flex; justify-content:space-evenly">
 <span>Par: <%= @hole.par %></span>
+  <%= link_to "Scorecard", scores_path(match_id: @match.id) %>
 <span>Stroke: <%= @hole.stroke %></span>
 </div>
 
@@ -44,12 +45,6 @@
 <% @players.each do |player| %>
   <%= render "form", player: player, score: player.scores.find_or_create_by(match_id: @match.id, hole_id: @hole.id) %>
 <% end %>
-</div>
-
-<br>
-
-<div style="text-align:center; margin-bottom:32px">
-  <%= link_to "Back to scorecard", scores_path(match_id: @match.id) %>
 </div>
 
 <script>
