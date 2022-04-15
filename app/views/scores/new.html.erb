@@ -1,17 +1,50 @@
 <div style="text-align: center; position: absolute; width: 100%; top: 0px"><p style="color: green; "><%= notice %></p></div>
 
-<h4 style="text-align:center; margin: 0"><%= @match.course.name %></h4>
-<div style="display:flex; justify-content:center">
-  <h2 class="logo" style="margin-bottom:0">No. <%= @hole.number %></h2>
+<div style="display:flex; justify-content: space-between;">
+  <%= form_tag @previous_score ? new_score_path : scores_path, method: :get do %>
+    <% if @previous_score %>
+      <%= hidden_field_tag "score[match_id]", @previous_score.match_id %>
+      <%= hidden_field_tag "score[hole_id]", @previous_score.hole_id %>
+    <% else %>
+      <%= hidden_field_tag "match_id", @match.id %>
+    <% end %>
+    <%= button_tag type: :submit, style: "position: relative; margin: 16px 8px 8px; width: 40px; height: 40px; background: #e6dcdc; border: none; box-shadow: var(--box-shadow); border-radius: 20px;", ontouchstart: "" do %>
+      <svg width="24px" height="24px" style="position: absolute; fill: #000; left: 8px; top: 8px;">
+        <use xlink:href="<%= image_url 'solid.svg#chevron-left' %>"></use>
+      </svg>
+    <% end %>
+  <% end %>
+  <div>
+    <h4 style="text-align:center; margin: 0"><%= @match.course.name %></h4>
+    <div style="display:flex; justify-content:center">
+      <h2 class="logo" style="margin-bottom:0">No. <%= @hole.number %></h2>
+    </div>
+  </div>
+  <%= form_tag @next_score ? new_score_path : scores_path, method: :get do %>
+    <% if @next_score %>
+      <%= hidden_field_tag "score[match_id]", @next_score.match_id %>
+      <%= hidden_field_tag "score[hole_id]", @next_score.hole_id %>
+    <% else %>
+      <%= hidden_field_tag "match_id", @match.id %>
+    <% end %>
+    <%= button_tag type: :submit, style: "position: relative; margin: 16px 8px 8px; width: 40px; height: 40px; background: #e6dcdc; border: none; box-shadow: var(--box-shadow); border-radius: 20px;", ontouchstart: "" do %>
+      <svg width="24px" height="24px" style="position: absolute; fill: #000; left: 8px; top: 8px;">
+        <use xlink:href="<%= image_url 'solid.svg#chevron-right' %>"></use>
+      </svg>
+    <% end %>
+  <% end %>
+
 </div>
 <div style="display:flex; justify-content:space-evenly">
 <span>Par: <%= @hole.par %></span>
 <span>Stroke: <%= @hole.stroke %></span>
 </div>
 
+<div id="players">
 <% @players.each do |player| %>
   <%= render "form", player: player, score: player.scores.find_or_create_by(match_id: @match.id, hole_id: @hole.id) %>
 <% end %>
+</div>
 
 <br>
 
@@ -38,7 +71,7 @@
     input.dispatchEvent(new Event('change'))
   }, 300)
 
-  document.querySelectorAll('form').forEach(form => {
+  document.getElementById('players').querySelectorAll('form').forEach(form => {
     form.addEventListener('submit', e => {
       const body = new FormData(form)
       fetch(form.action, {
