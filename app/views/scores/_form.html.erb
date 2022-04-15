@@ -1,4 +1,13 @@
-<%= form_with(model: score, html: { style: "display: flex;flex-direction: column;justify-content: center;"}, format: :json) do |form| %>
+<div style="background:white; margin: 8px; overflow-x:scroll; display:flex; flex-direction:column; border-radius: 8px; box-shadow: var(--box-shadow);">
+  <%= form_with(model: score, html: { style: "display: flex;flex-direction: column;justify-content: center;"}, format: :json) do |form| %>
+    <div style="display:flex; margin: 8px; justify-content: space-between">
+      <div style="display:flex; flex-direction: column; justify-content: flex-start">
+        <%= link_to player do %>
+          <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: var(--box-shadow)" %>
+        <% end %>
+        <div style="text-align:center; margin-top: 4px"><%= player.nick_name %></div>
+      </div>
+
   <% if score.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(score.errors.count, "error") %> prohibited this score from being saved:</h2>
@@ -15,10 +24,31 @@
   <%= form.hidden_field :hole_id %>
   <%= form.hidden_field :player_id %>
 
+  <div style="display:flex; flex-direction: column; justify-content: space-between">
+   <div style="display: flex; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; justify-content: center">
+        Strokes
+      </div>
+      +1
+    </div>
+    <div style="display: flex; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; justify-content: center">
+        <%= form.label :putt_count, "Putts", style: "margin-right: 4px"%>
+      </div>
+      <%= form.select :putt_count, options_for_select(1..5, score.putt_count), include_blank: true %>
+    </div>
+    <div style="display: flex; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; justify-content: center">
+        <%= form.label :lost_ball_count, "Balls", style: "margin-right: 4px"%>
+      </div>
+      <%= form.select :lost_ball_count, options_for_select(1..5, score.lost_ball_count), include_blank: true %>
+    </div>
+  </div>
+
   <div style="display:flex;">
-    <div style="display:flex; flex-direction:column; justify-content:center;">
-      <%= form.label :score, for: dom_id(score) %>
-      <%= form.number_field :score, id: dom_id(score), style: "max-width: 50px;", min: "1", step: "1", data: { par: score.hole.par } %>
+    <div style="display:flex; flex-direction:column; justify-content:space-around; text-align:center">
+      <%= form.label :total_count, "Score", for: dom_id(score), style: "font-weight: bold" %>
+      <%= form.number_field :total_count, id: dom_id(score), style: "text-align: center; width: 32px; height: 32px; font-size: 32px", min: "1", step: "1", data: { par: score.hole.par } %>
     </div>
     <div style="display:flex; flex-direction: column;">
       <%= button_tag type: "button", style: "padding: 2px 2px 2px 8px; width: 48px; height: 48px; background: none; border: none", data: { target: dom_id(score) }, ontouchstart: "" do %>
@@ -33,4 +63,6 @@
       <% end %>
     </div>
   </div>
+    </div>
 <% end %>
+  </div>

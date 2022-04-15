@@ -1,20 +1,16 @@
 <div style="text-align: center; position: absolute; width: 100%; top: 0px"><p style="color: green; "><%= notice %></p></div>
 
-<h1 class="logo" style="margin-bottom:0">No. <%= @hole.number %></h1>
-<h3 style="text-align:center; margin: 0 0 24px"><%= @match.course.name %></h3>
+<h4 style="text-align:center; margin: 0"><%= @match.course.name %></h4>
+<div style="display:flex; justify-content:center">
+  <h2 class="logo" style="margin-bottom:0">No. <%= @hole.number %></h2>
+</div>
+<div style="display:flex; justify-content:space-evenly">
+<span>Par: <%= @hole.par %></span>
+<span>Stroke: <%= @hole.stroke %></span>
+</div>
 
 <% @players.each do |player| %>
-  <div style="background:white; margin: 8px; overflow-x:scroll; display:flex; flex-direction:column; border-radius: 8px; box-shadow: var(--box-shadow);">
-    <div style="display:flex; justify-content: space-between; margin: 8px">
-      <div style="display:flex; flex-direction: column; justify-content: flex-start">
-        <%= link_to player do %>
-          <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: var(--box-shadow)" %>
-        <% end %>
-        <div style="text-align:center; margin-top: 4px"><%= player.nick_name %></div>
-      </div>
-      <%= render "form", score: player.scores.find_or_create_by(match_id: @match.id, hole_id: @hole.id) %>
-    </div>
-  </div>
+  <%= render "form", player: player, score: player.scores.find_or_create_by(match_id: @match.id, hole_id: @hole.id) %>
 <% end %>
 
 <br>
@@ -50,6 +46,11 @@
         body: body,
       })
       e.preventDefault()
+    })
+    form.querySelectorAll('select').forEach(select => {
+      select.addEventListener('change', e => {
+        form.dispatchEvent(new Event('submit'));
+      });
     })
     form.querySelector('input[type="number"]').addEventListener('change', e => {
       form.dispatchEvent(new Event('submit'));
