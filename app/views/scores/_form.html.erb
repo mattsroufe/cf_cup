@@ -1,13 +1,11 @@
-<div class="row">
-<div class="list-group list-group-flush">
-  <%= form_with(model: score, html: { style: "display: flex;flex-direction: column;justify-content: center;"}, format: :json) do |form| %>
-    <div style="display:flex; margin: 8px; justify-content: space-between">
-      <div style="display:flex; flex-direction: column; justify-content: flex-start">
-        <%= link_to player do %>
-          <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: var(--box-shadow)" %>
-        <% end %>
-        <div style="text-align:center; margin-top: 4px"><%= player.nick_name %></div>
-      </div>
+<%= form_with(model: score, format: :json) do |form| %>
+  <div style="display:flex; justify-content: space-between">
+    <div style="display:flex; flex-direction: column; justify-content: flex-start">
+      <%= link_to player do %>
+        <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: var(--box-shadow)" %>
+      <% end %>
+      <div style="text-align:center; margin-top: 4px"><%= player.nick_name %></div>
+    </div>
 
   <% if score.errors.any? %>
     <div style="color: red">
@@ -66,5 +64,3 @@
   </div>
     </div>
 <% end %>
-  </div>
-  </div>
