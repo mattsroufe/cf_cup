@@ -133,6 +133,9 @@
     }))
     const json1 = await res1.json()
     const hole = json1[0]
+    const params = new URLSearchParams(document.location.search);
+    params.set('score[hole_id]', hole.id)
+    history.replaceState(null, null, "?" + params.toString());
     e.relatedTarget.querySelector('.hole-par').innerText = hole.par
     e.relatedTarget.querySelector('.hole-stroke').innerText = hole.stroke
   })
