@@ -3,7 +3,7 @@ class HolesController < ApplicationController
 
   # GET /holes or /holes.json
   def index
-    @holes = Hole.all
+    @holes = Hole.where(course_id: params[:course_id], number: params[:number])
   end
 
   # GET /holes/1 or /holes/1.json

@@ -4,8 +4,13 @@ class ScoresController < ApplicationController
   # GET /scores or /scores.json
   def index
     @match = Match.find(params[:match_id])
-    @scores = Score.where(match_id: params[:match_id], hole_id: params[:hole_id])
-  end
+    if params[:hole_number]
+      hole = Hole.find_by(course_id: @match.course_id, number: params[:hole_number])
+      @scores = Score.where(match_id: params[:match_id], hole_id: hole.id)
+    else
+      @scores = Score.where(match_id: params[:match_id])
+    end
+ end
 
   # GET /scores/1 or /scores/1.json
   def show
@@ -15,19 +20,6 @@ class ScoresController < ApplicationController
   def new
     @match = Match.find(score_params[:match_id])
     @hole = Hole.find(score_params[:hole_id])
-    previous_hole = Hole.find_by(course_id: @match.course_id, number: @hole.number - 1) if @hole.number > 0
-    if previous_hole
-      if @hole.number > 1
-        @previous_score = Score.find_or_create_by(match_id: @match.id, hole_id: previous_hole.id) if previous_hole
-      end
-    end
-    next_hole = Hole.find_by(course_id: @match.course_id, number: @hole.number + 1) if @hole.number > 0
-    if next_hole
-      if @hole.number < 18
-        @next_score = Score.find_or_create_by(match_id: @match.id, hole_id: next_hole.id)
-      end
-    end
- 
     @players = @match.teams.flat_map(&:players)
   end
 

@@ -1,7 +1,7 @@
-<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
+<div id="carouselExampleControls" class="carousel slide" data-hole-count="<%= @match.course.holes.count %>" data-hole-number="<%= @hole.number %>" data-bs-ride="carousel" data-bs-interval="false">
   <div class="carousel-inner">
-    <% 3.times do |i| %>
-      <div class="carousel-item <%= 'active' if i == 1 %>">
+    <% 2.times do |i| %>
+      <div class="carousel-item <%= 'active' if i == 0 %>">
         <div class="container">
           <div class="row">
             <div class="col text-center">
@@ -9,22 +9,22 @@
           </div>
         </div>
         <div class="row">
-          <h2 class="logo text-center mb-0">No. <%= i %></h2>
+          <h2 class="logo text-center mb-0">No. <span class="hole-number"><%= @hole.number %></span></h2>
         </div>
         <div class="row text-center mb-1">
           <div class="col">
-            <span>Par: <%= @hole.par %></span>
+            Par: <span class="hole-par"><%= @hole.par %></span>
           </div>
           <div class="col">
             <%= link_to "Scorecard", scores_path(match_id: @match.id) %>
           </div>
           <div class="col">
-            <span>Stroke: <%= @hole.stroke %></span>
+            Stroke: <span class="hole-stroke"><%= @hole.stroke %></span>
           </div>
         </div>
-        <ul id="players" class="row list-group list-group-flush">
+        <ul class="players row list-group list-group-flush">
           <% @players.each do |player| %>
-            <%= render "form", player: player, score: player.scores.find_or_create_by(match_id: @match.id, hole_id: @hole.id) %>
+            <%= render "form", player: player, score: player.scores.find_by!(match_id: @match.id, hole_id: @hole.id) %>
           <% end %>
         </ul>
         </div>
@@ -47,19 +47,6 @@
   </button>
 </div>
 
-<div style="text-align: center; position: absolute; width: 100%; top: 0px"><p style="color: green; "><%= notice %></p></div>
-
-<div style="display:flex; justify-content: space-between;">
-  <%= form_tag @previous_score ? new_score_path : scores_path, method: :get do %>
-    <% if @previous_score %>
-      <%= hidden_field_tag "score[match_id]", @previous_score.match_id %>
-      <%= hidden_field_tag "score[hole_id]", @previous_score.hole_id %>
-    <% else %>
-      <%= hidden_field_tag "match_id", @match.id %>
-    <% end %>
-  <% end %>
-</div>
-
 <script>
   function debounce(func, wait, immediate) {
     var timeout;
@@ -79,12 +66,13 @@
     input.dispatchEvent(new Event('change'))
   }, 300)
 
-  document.getElementById('players').querySelectorAll('form').forEach(form => {
+  document.querySelectorAll('.players').forEach(section => {
+    section.querySelectorAll('form').forEach(form => {
     form.addEventListener('submit', e => {
-      const body = new FormData(form)
+      const formData = new FormData(form)
       fetch(form.action, {
         method: form.method, // or 'PUT'
-        body: body,
+        body: formData,
       })
       e.preventDefault()
     })
@@ -98,7 +86,7 @@
     })
     form.querySelectorAll('[data-target]').forEach(button => {
       button.addEventListener('click', e => {
-        const input = form.querySelector(`#${button.dataset.target}`);
+        const input = form.querySelector('[name="score[total_count]"]');
         if (input.value.length > 0) {
           input.value = button.querySelector('use').getAttribute('xlink:href').split('-').splice(-1)[0] === 'plus' ? parseInt(input.value) + 1 : parseInt(input.value) - 1
         } else {
@@ -108,5 +96,44 @@
         e.preventDefault()
       })
     })
+    })
+  })
+  var myCarousel = document.getElementById('carouselExampleControls')
+
+  myCarousel.addEventListener('slide.bs.carousel', async function (e) {
+    const holeCount = parseInt(e.target.dataset.holeCount);
+    const holeNumber = parseInt(e.target.dataset.holeNumber);
+    let nextHole = e.direction === 'left' ? holeNumber + 1 : holeNumber - 1
+    if (nextHole < 1) {
+      nextHole = holeCount
+    } else if (nextHole > holeCount) {
+      nextHole = 1
+    }
+    e.target.dataset.holeNumber = nextHole;
+    e.relatedTarget.querySelector('.hole-number').innerText = nextHole
+    const res = await fetch("<%= scores_path format: :json %>" + '?' + new URLSearchParams({
+      match_id: "<%= @match.id %>",
+      hole_number: nextHole,
+    }))
+    const scores = await res.json()
+    e.relatedTarget.querySelectorAll('form').forEach(form => {
+      const score = scores.find(s => s.player_id == form.dataset.playerId)
+      form.action = score.url;
+      form.querySelector('[name="score[match_id]"]').value = score.match_id
+      form.querySelector('[name="score[player_id]"]').value = score.player_id
+      form.querySelector('[name="score[hole_id]"]').value = score.hole_id
+      form.querySelector('[name="score[putt_count]"]').value = score.putt_count || ''
+      form.querySelector('[name="score[lost_ball_count]"]').value = score.lost_ball_count || ''
+      form.querySelector('[name="score[total_count]"]').value = score.total_count || ''
+    })
+
+    const res1 = await fetch("<%= holes_path format: :json %>" + '?' + new URLSearchParams({
+      course_id: "<%= @match.course_id %>",
+      number: nextHole,
+    }))
+    const json1 = await res1.json()
+    const hole = json1[0]
+    e.relatedTarget.querySelector('.hole-par').innerText = hole.par
+    e.relatedTarget.querySelector('.hole-stroke').innerText = hole.stroke
   })
 </script>
