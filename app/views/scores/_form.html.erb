@@ -1,55 +1,37 @@
+<li class="list-group-item">
 <%= form_with(model: score, format: :json) do |form| %>
-  <div style="display:flex; justify-content: space-between">
-    <div style="display:flex; flex-direction: column; justify-content: flex-start">
+  <%= form.hidden_field :match_id %>
+  <%= form.hidden_field :hole_id %>
+  <%= form.hidden_field :player_id %>
+
+  <div class="row align-items-start">
+    <div class="col-3">
       <%= link_to player do %>
         <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: var(--box-shadow)" %>
       <% end %>
       <div style="text-align:center; margin-top: 4px"><%= player.nick_name %></div>
     </div>
-
-  <% if score.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(score.errors.count, "error") %> prohibited this score from being saved:</h2>
-
-      <ul>
-        <% score.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <%= form.hidden_field :match_id %>
-  <%= form.hidden_field :hole_id %>
-  <%= form.hidden_field :player_id %>
-
-  <div style="display:flex; flex-direction: column; justify-content: space-between">
-   <div style="display: flex; justify-content: space-between">
-      <div style="display: flex; flex-direction: column; justify-content: center">
-        Strokes
+    <div class="col">
+      <div style="display: flex; justify-content: space-between">
+        <div style="display: flex; flex-direction: column; justify-content: center">
+          Strokes
+        </div>
+        +1
       </div>
-      +1
-    </div>
-    <div style="display: flex; justify-content: space-between">
-      <div style="display: flex; flex-direction: column; justify-content: center">
-        <%= form.label :putt_count, "Putts", style: "margin-right: 4px"%>
+      <div class="row mt-1">
+        <%= form.label :putt_count, "Putts", class: "col form-label" %>
+        <%= form.select :putt_count, options_for_select(1..5, score.putt_count), {include_blank: true}, class: "col form-control form-control-sm" %>
       </div>
-      <%= form.select :putt_count, options_for_select(1..5, score.putt_count), include_blank: true %>
-    </div>
-    <div style="display: flex; justify-content: space-between">
-      <div style="display: flex; flex-direction: column; justify-content: center">
-        <%= form.label :lost_ball_count, "Balls", style: "margin-right: 4px"%>
+      <div class="row mt-1">
+        <%= form.label :lost_ball_count, "Balls", class: "col form-label" %>
+        <%= form.select :lost_ball_count, options_for_select(1..5, score.lost_ball_count), {include_blank: true}, class: "col form-control form-control-sm" %>
       </div>
-      <%= form.select :lost_ball_count, options_for_select(1..5, score.lost_ball_count), include_blank: true %>
     </div>
-  </div>
-
-  <div style="display:flex;">
-    <div style="display:flex; flex-direction:column; justify-content:space-around; text-align:center">
-      <%= form.label :total_count, "Score", for: dom_id(score), style: "font-weight: bold" %>
-      <%= form.number_field :total_count, id: dom_id(score), style: "text-align: center; width: 32px; height: 32px; font-size: 32px", min: "1", step: "1", data: { par: score.hole.par } %>
+    <div class="col text-center">
+      <%= form.label :total_count, "Score", for: dom_id(score), class: "form-label" %>
+      <%= form.number_field :total_count, id: dom_id(score), class: "text-center form-control form-control-lg", data: { par: score.hole.par } %>
     </div>
-    <div style="display:flex; flex-direction: column;">
+    <div class="col">
       <%= button_tag type: "button", style: "padding: 2px 2px 2px 8px; width: 48px; height: 48px; background: none; border: none", data: { target: dom_id(score) }, ontouchstart: "" do %>
         <svg width="40px" height="40px" style="fill: #730aad; box-shadow: var(--box-shadow); border-radius: 20px;">
           <use xlink:href="<%= image_url 'solid.svg#circle-plus' %>"></use>
@@ -61,6 +43,5 @@
         </svg>
       <% end %>
     </div>
-  </div>
-    </div>
 <% end %>
+</li>

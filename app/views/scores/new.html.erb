@@ -1,25 +1,33 @@
-<div id="carouselExampleControls" class="carousel slide text-center" data-bs-ride="carousel" data-bs-interval="false">
+<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
   <div class="carousel-inner">
     <% 3.times do |i| %>
       <div class="carousel-item <%= 'active' if i == 1 %>">
-        <%= @match.course.name %>
-        <div style="display:flex; justify-content:center">
-          <h2 class="logo" style="margin-bottom:0">No. <%= i %></h2>
+        <div class="container">
+          <div class="row">
+            <div class="col text-center">
+              <%= @match.course.name %>
+          </div>
         </div>
-        <div style="display:flex; justify-content:space-evenly">
-          <span>Par: <%= @hole.par %></span>
+        <div class="row">
+          <h2 class="logo text-center mb-0">No. <%= i %></h2>
+        </div>
+        <div class="row text-center mb-1">
+          <div class="col">
+            <span>Par: <%= @hole.par %></span>
+          </div>
+          <div class="col">
             <%= link_to "Scorecard", scores_path(match_id: @match.id) %>
-          <span>Stroke: <%= @hole.stroke %></span>
+          </div>
+          <div class="col">
+            <span>Stroke: <%= @hole.stroke %></span>
+          </div>
         </div>
-  <ul id="players" class="list-group list-group-flush">
+        <ul id="players" class="row list-group list-group-flush">
           <% @players.each do |player| %>
-
-    <li class="list-group-item">
-  
             <%= render "form", player: player, score: player.scores.find_or_create_by(match_id: @match.id, hole_id: @hole.id) %>
-            </li>
           <% end %>
         </ul>
+        </div>
       </div>
     <% end %>
   </div>
