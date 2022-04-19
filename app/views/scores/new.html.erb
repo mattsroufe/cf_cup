@@ -139,7 +139,7 @@
         let playerStroke = 0
         if (hole.stroke < playerHandicap) playerStroke = 1 
         if (hole.stroke < playerHandicap - 18) playerStroke = 2
-        form.querySelector('.player-stroke').innerText = playerStroke
+        form.querySelector('.player-stroke').innerText = `+${playerStroke}`
         form.action = score.url;
         const matchId = form.querySelector('[name="score[match_id]"]')
         matchId.value = score.match_id
