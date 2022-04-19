@@ -1,47 +1,48 @@
 <li class="list-group-item">
-<%= form_with(model: score, format: :json, namespace: SecureRandom.hex, method: :patch, data: {'player-id': score.player_id}) do |form| %>
+<%= form_with(model: score, format: :json, namespace: SecureRandom.hex, method: :patch, data: {'player-id': score.player_id, 'player-handicap': player.handicap}) do |form| %>
   <%= form.hidden_field :match_id %>
   <%= form.hidden_field :hole_id %>
   <%= form.hidden_field :player_id %>
 
-  <div class="row align-items-start">
-    <div class="col-3">
+  <div class="d-flex justify-content-between" style="flex-wrap: nowrap">
+    <div class="text-center">
       <%= link_to player do %>
         <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: var(--box-shadow)" %>
       <% end %>
       <div style="text-align:center; margin-top: 4px"><%= player.nick_name %></div>
     </div>
-    <div class="col">
-      <div style="display: flex; justify-content: space-between">
-        <div style="display: flex; flex-direction: column; justify-content: center">
-          Strokes
-        </div>
-        +1
+    <div class="mx-2 flex-grow-1" style="max-width: 128px">
+      <div class="d-flex justify-content-between mb-2">
+        <span>Strokes</span>
+        <% player_stroke = 0 %>
+        <% player_stroke = 1 if @hole.stroke < player.handicap %>
+        <% player_stroke = 2 if @hole.stroke < player.handicap - 18 %>
+        <div class="player-stroke">+<%= player_stroke %></div>
       </div>
-      <div class="row mt-1">
-        <%= form.label :putt_count, "Putts", class: "col form-label" %>
-        <%= form.select :putt_count, options_for_select(1..5, score.putt_count), {include_blank: true}, class: "col form-control form-control-sm" %>
+      <div class="d-flex mb-2 justify-content-between">
+        <%= form.label :putt_count, "Putts", class: "form-label" %>&nbsp;
+        <%= form.select :putt_count, options_for_select(1..5, score.putt_count), {include_blank: true}, class: "ml-2 form-control form-control-sm text-center", style: "max-width: 40px" %>
       </div>
-      <div class="row mt-1">
-        <%= form.label :lost_ball_count, "Balls", class: "col form-label" %>
-        <%= form.select :lost_ball_count, options_for_select(1..5, score.lost_ball_count), {include_blank: true}, class: "col form-control form-control-sm" %>
+      <div class="d-flex justify-content-between">
+        <%= form.label :lost_ball_count, "Balls", class: "form-label" %>&nbsp;
+        <%= form.select :lost_ball_count, options_for_select(1..5, score.lost_ball_count), {include_blank: true}, class: "form-control form-control-sm text-center", style: "max-width: 40px" %>
       </div>
     </div>
-    <div class="col text-center">
+    <div class="text-center flex-grow-0">
       <%= form.label :total_count, "Score", class: "form-label" %>
-      <%= form.number_field :total_count, class: "text-center form-control form-control-lg", data: { par: score.hole.par } %>
+      <%= form.number_field :total_count, style: "max-width: 56px", class: "text-center form-control", data: { par: score.hole.par } %>
     </div>
-    <div class="col">
-        <%= button_tag type: "button", style: "padding: 2px 2px 2px 8px; width: 48px; height: 48px; background: none; border: none", data: { target: dom_id(score) }, ontouchstart: "" do %>
-          <svg width="40px" height="40px" style="fill: #730aad; box-shadow: var(--box-shadow); border-radius: 20px;">
-            <use xlink:href="<%= image_url 'solid.svg#circle-plus' %>"></use>
-          </svg>
-        <% end %>
-        <%= button_tag type: "button", style: "padding: 2px 2px 2px 8px; width: 48px; height: 48px; background: none; border: none", data: { target: dom_id(score) } do %>
-          <svg width="40px" height="40px" style="fill: #00ad56; box-shadow: var(--box-shadow); border-radius: 20px;">
-            <use xlink:href="<%= image_url 'solid.svg#circle-minus' %>"></use>
-          </svg>
-        <% end %>
+    <div class="d-flex flex-column">
+      <%= button_tag type: "button", style: "padding: 0; width: 52px; height: 52px; background: none; border: none", data: { target: dom_id(score) }, ontouchstart: "" do %>
+        <svg width="40px" height="40px" style="fill: #730aad; box-shadow: var(--box-shadow); border-radius: 20px;">
+          <use xlink:href="<%= image_url 'solid.svg#circle-plus' %>"></use>
+        </svg>
+      <% end %>
+      <%= button_tag type: "button", style: "padding: 0; width: 52px; height: 52px; background: none; border: none", data: { target: dom_id(score) } do %>
+        <svg width="40px" height="40px" style="fill: #00ad56; box-shadow: var(--box-shadow); border-radius: 20px;">
+          <use xlink:href="<%= image_url 'solid.svg#circle-minus' %>"></use>
+        </svg>
+      <% end %>
     </div>
 <% end %>
 </li>
