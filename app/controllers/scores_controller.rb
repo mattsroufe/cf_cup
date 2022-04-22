@@ -8,7 +8,7 @@ class ScoresController < AuthenticatedController
       hole = Hole.find_by(course_id: @match.course_id, number: params[:hole_number])
       @scores = Score.where(match_id: params[:match_id], hole_id: hole.id)
     else
-      @scores = Score.where(match_id: params[:match_id])
+      @scores = Score.where(match_id: params[:match_id]).group(:player_id)
     end
  end
 

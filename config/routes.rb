@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :holes
   resources :scores
+  resources :sessions
   get 'home/index'
   resources :match_teams
   resources :courses
