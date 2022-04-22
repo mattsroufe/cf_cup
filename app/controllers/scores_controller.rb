@@ -1,4 +1,4 @@
-class ScoresController < ApplicationController
+class ScoresController < AuthenticatedController
   before_action :set_score, only: %i[ show edit update destroy ]
 
   # GET /scores or /scores.json
