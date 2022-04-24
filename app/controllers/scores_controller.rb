@@ -1,5 +1,5 @@
 class ScoresController < AuthenticatedController
-  before_action :set_score, only: %i[ show edit destroy ]
+  before_action :set_score, only: %i[ show edit update destroy ]
 
   # GET /scores or /scores.json
   def index
@@ -45,18 +45,12 @@ class ScoresController < AuthenticatedController
   # PATCH/PUT /scores/1 or /scores/1.json
   def update
     respond_to do |format|
-      table = Score.arel_table
-      update_manager = Arel::UpdateManager.new table
-      update_manager.set score_params.to_h.to_a.map { |pair| [table[pair[0]], pair[1].to_i] }
-      update_manager.where table[:id].eq(params[:id])
-      result = ActiveRecord::Base.connection.execute update_manager.to_sql
-
-      if result.cmd_tuples > 0
+      if @score.update(score_params)
         format.html { redirect_to new_score_path(score: { match_id: @score.match_id, hole_id: @score.hole_id }), notice: "Score was successfully updated." }
-        format.json { render json: score_params.as_json }
+        format.json { render :show, status: :ok, location: @score }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render body: nil, status: :unprocessable_entity }
+        format.json { render json: @score.errors, status: :unprocessable_entity }
       end
     end
   end
