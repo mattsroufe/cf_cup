@@ -1,4 +1,5 @@
 class AuthenticatedController < ApplicationController
+  LOCAL_USER = 'money'
   around_action :set_local_user
 
   private
