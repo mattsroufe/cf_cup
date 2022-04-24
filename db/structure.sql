@@ -9,6 +9,13 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -402,17 +409,24 @@ CREATE UNIQUE INDEX index_scores_on_match_id_and_hole_id_and_player_id ON public
 
 
 --
--- Name: scores player_scores; Type: POLICY; Schema: public; Owner: -
---
-
-CREATE POLICY player_scores ON public.scores FOR SELECT USING (true);
-
-
---
 -- Name: scores; Type: ROW SECURITY; Schema: public; Owner: -
 --
 
 ALTER TABLE public.scores ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: scores update_match_score; Type: POLICY; Schema: public; Owner: -
+--
+
+CREATE POLICY update_match_score ON public.scores USING (('money'::name = CURRENT_USER));
+
+
+--
+-- Name: scores view_all_player_scores; Type: POLICY; Schema: public; Owner: -
+--
+
+CREATE POLICY view_all_player_scores ON public.scores FOR SELECT USING (true);
+
 
 --
 -- PostgreSQL database dump complete
@@ -434,6 +448,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220411173308'),
 ('20220411173635'),
 ('20220414180622'),
-('20220416190052');
+('20220416190052'),
+('20220424085406');
 
 
