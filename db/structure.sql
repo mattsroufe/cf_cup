@@ -37,30 +37,11 @@ CREATE TABLE public.ar_internal_metadata (
 --
 
 CREATE TABLE public.courses (
-    id bigint NOT NULL,
     name character varying,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL
 );
-
-
---
--- Name: courses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.courses_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: courses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.courses_id_seq OWNED BY public.courses.id;
 
 
 --
@@ -68,34 +49,15 @@ ALTER SEQUENCE public.courses_id_seq OWNED BY public.courses.id;
 --
 
 CREATE TABLE public.holes (
-    id bigint NOT NULL,
-    course_id integer,
     par integer,
     stroke integer,
     meters integer,
     number integer,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    course_id uuid DEFAULT public.gen_random_uuid() NOT NULL
 );
-
-
---
--- Name: holes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.holes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: holes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.holes_id_seq OWNED BY public.holes.id;
 
 
 --
@@ -103,31 +65,12 @@ ALTER SEQUENCE public.holes_id_seq OWNED BY public.holes.id;
 --
 
 CREATE TABLE public.match_teams (
-    id bigint NOT NULL,
-    match_id integer,
-    team_id integer,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    match_id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    team_id uuid DEFAULT public.gen_random_uuid() NOT NULL
 );
-
-
---
--- Name: match_teams_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.match_teams_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: match_teams_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.match_teams_id_seq OWNED BY public.match_teams.id;
 
 
 --
@@ -135,31 +78,12 @@ ALTER SEQUENCE public.match_teams_id_seq OWNED BY public.match_teams.id;
 --
 
 CREATE TABLE public.matches (
-    id bigint NOT NULL,
-    course_id integer,
     date date,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    course_id uuid DEFAULT public.gen_random_uuid() NOT NULL
 );
-
-
---
--- Name: matches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.matches_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: matches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.matches_id_seq OWNED BY public.matches.id;
 
 
 --
@@ -167,7 +91,6 @@ ALTER SEQUENCE public.matches_id_seq OWNED BY public.matches.id;
 --
 
 CREATE TABLE public.players (
-    id bigint NOT NULL,
     first_name character varying,
     last_name character varying,
     username character varying,
@@ -177,31 +100,13 @@ CREATE TABLE public.players (
     handicap numeric,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    team_id integer,
     best_moment text,
     nick_name character varying,
     home_club character varying,
-    trophies character varying
+    trophies character varying,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    team_id uuid DEFAULT public.gen_random_uuid() NOT NULL
 );
-
-
---
--- Name: players_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.players_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: players_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.players_id_seq OWNED BY public.players.id;
 
 
 --
@@ -218,35 +123,16 @@ CREATE TABLE public.schema_migrations (
 --
 
 CREATE TABLE public.scores (
-    id bigint NOT NULL,
-    match_id integer,
-    hole_id integer,
-    player_id integer,
     total_count integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     putt_count integer,
-    lost_ball_count integer
+    lost_ball_count integer,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    match_id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    hole_id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    player_id uuid DEFAULT public.gen_random_uuid() NOT NULL
 );
-
-
---
--- Name: scores_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.scores_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: scores_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.scores_id_seq OWNED BY public.scores.id;
 
 
 --
@@ -254,79 +140,11 @@ ALTER SEQUENCE public.scores_id_seq OWNED BY public.scores.id;
 --
 
 CREATE TABLE public.teams (
-    id bigint NOT NULL,
     name character varying,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL
 );
-
-
---
--- Name: teams_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.teams_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: teams_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.teams_id_seq OWNED BY public.teams.id;
-
-
---
--- Name: courses id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.courses ALTER COLUMN id SET DEFAULT nextval('public.courses_id_seq'::regclass);
-
-
---
--- Name: holes id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.holes ALTER COLUMN id SET DEFAULT nextval('public.holes_id_seq'::regclass);
-
-
---
--- Name: match_teams id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.match_teams ALTER COLUMN id SET DEFAULT nextval('public.match_teams_id_seq'::regclass);
-
-
---
--- Name: matches id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.matches ALTER COLUMN id SET DEFAULT nextval('public.matches_id_seq'::regclass);
-
-
---
--- Name: players id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.players ALTER COLUMN id SET DEFAULT nextval('public.players_id_seq'::regclass);
-
-
---
--- Name: scores id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.scores ALTER COLUMN id SET DEFAULT nextval('public.scores_id_seq'::regclass);
-
-
---
--- Name: teams id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.teams ALTER COLUMN id SET DEFAULT nextval('public.teams_id_seq'::regclass);
 
 
 --
@@ -402,13 +220,6 @@ ALTER TABLE ONLY public.teams
 
 
 --
--- Name: index_scores_on_match_id_and_hole_id_and_player_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_scores_on_match_id_and_hole_id_and_player_id ON public.scores USING btree (match_id, hole_id, player_id);
-
-
---
 -- Name: scores; Type: ROW SECURITY; Schema: public; Owner: -
 --
 
@@ -449,6 +260,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220411173635'),
 ('20220414180622'),
 ('20220416190052'),
-('20220424085406');
+('20220424085406'),
+('20220424085825'),
+('20220424093839');
 
 
