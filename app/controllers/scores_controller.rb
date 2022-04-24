@@ -19,7 +19,8 @@ class ScoresController < AuthenticatedController
         end
       else
         format.html do
-          @scores = Score.where(match_id: params[:match_id]).group(:player_id)
+          @players = Player.where(team_id: @match.teams.pluck(:id))
+          @scores = Score.where(match_id: params[:match_id])
         end
       end
     end
