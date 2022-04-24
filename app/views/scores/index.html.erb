@@ -20,7 +20,7 @@
   </thead>
   <% @match.course.holes.order(:number).each do |hole| %>
     <tr>
-      <td style="text-align:center; border-top: 1px solid lightgray;"><%= link_to hole.id, new_score_path(score: { match_id: @match.id, hole_id: hole.id }) %></td>
+      <td style="text-align:center; border-top: 1px solid lightgray;"><%= link_to hole.number, new_score_path(score: { match_id: @match.id, hole_id: hole.id }) %></td>
       <td style="text-align:center; border-top: 1px solid lightgray;"><%= hole.stroke %></td>
       <td style="text-align:center; border-top: 1px solid lightgray;"><%= hole.par %></td>
       <% @players.each do |player| %>
