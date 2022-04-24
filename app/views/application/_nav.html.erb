@@ -1,8 +1,8 @@
 <ul style="display: flex; justify-content: space-around; padding: 0; list-style: none; margin: 24px 0 0; padding-bottom: 16px;">
   <% [
       ['Matches', matches_path],
-      ['Leaderboard', players_path],
-      ['Scorecards', players_path]
+      ['Leaderboard', leaderboard_index_path],
+      ['Players', players_path]
     ].each do |title, path| %>
     <li><%= link_to title, path, style: "text-decoration: none; color: inherit; font-weight: bold; #{current_page?(path) ? 'border-bottom: 2px solid; ' : ''}}" %></li>
   <% end %>

@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :scores
   resources :sessions
   get 'home/index'
+  get 'leaderboard/index'
   resources :match_teams
   resources :courses
   resources :matches
