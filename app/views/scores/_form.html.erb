@@ -1,5 +1,5 @@
 <li class="list-group-item">
-<%= form_with(model: score, format: :json, namespace: SecureRandom.hex, method: :patch, data: {'player-id': score.player_id, 'player-handicap': player.handicap}) do |form| %>
+<%= form_with(model: score, format: :json, namespace: score.id, method: :patch, data: {'player-id': score.player_id, 'player-handicap': player.handicap}) do |form| %>
   <%= form.hidden_field :match_id %>
   <%= form.hidden_field :hole_id %>
   <%= form.hidden_field :player_id %>
