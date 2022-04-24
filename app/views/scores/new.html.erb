@@ -121,52 +121,51 @@
       form.querySelector('[name="score[total_count]"]').disabled = true
     })
 
-    const getHole = await fetch("<%= holes_path format: :json %>" + '?' + new URLSearchParams({
-      course_id: "<%= @match.course_id %>",
-      number: nextHole,
-    })).then(res => res.json())
+    const csrfToken = document.querySelector("[name='csrf-token']").content
 
     const getScores = await fetch("<%= scores_path format: :json %>" + '?' + new URLSearchParams({
       match_id: "<%= @match.id %>",
       hole_number: nextHole,
     })).then(res => res.json())
 
-    Promise.all([getHole, getScores]).then(([holes, scores]) => {
-      const hole = holes[0];
-      e.relatedTarget.querySelectorAll('form').forEach(form => {
-        const score = scores.find(s => s.player_id == form.dataset.playerId)
-        const playerHandicap = parseInt(form.dataset.playerHandicap)
-        let playerStroke = 0
-        if (hole.stroke <= playerHandicap) playerStroke = 1 
-        if (hole.stroke <= playerHandicap - 18) playerStroke = 2
-        form.querySelector('.player-stroke').innerText = `+${playerStroke}`
-        form.action = score.url;
-        const matchId = form.querySelector('[name="score[match_id]"]')
-        matchId.value = score.match_id
-        matchId.disabled = false
-        const playerId = form.querySelector('[name="score[player_id]"]')
-        playerId.value = score.player_id
-        playerId.disabled = false
-        const holeId = form.querySelector('[name="score[hole_id]"]')
-        holeId.value = score.hole_id
-        holeId.disabled = false
-        const puttCount = form.querySelector('[name="score[putt_count]"]')
-        puttCount.value = score.putt_count || ''
-        puttCount.disabled = false
-        const lostBallCount = form.querySelector('[name="score[lost_ball_count]"]')
-        lostBallCount.value = score.lost_ball_count || ''
-        lostBallCount.disabled = false
-        const totalCount = form.querySelector('[name="score[total_count]"]')
-        totalCount.value = score.total_count || ''
-        totalCount.disabled = false
-      })
-  
-      const params = new URLSearchParams(document.location.search);
-      params.set('score[hole_id]', hole.id)
-      history.replaceState(null, null, "?" + params.toString());
-      e.relatedTarget.querySelector('.hole-par').innerText = hole.par
-      e.relatedTarget.querySelector('.hole-stroke').innerText = hole.stroke
- 
-    });
+    const hole = getScores.hole
+    const scores = getScores.scores
+
+    e.relatedTarget.querySelectorAll('form').forEach(form => {
+      const score = scores.find(s => s.player_id == form.dataset.playerId)
+      const playerHandicap = parseInt(form.dataset.playerHandicap)
+      let playerStroke = 0
+      if (hole.stroke <= playerHandicap) playerStroke = 1 
+      if (hole.stroke <= playerHandicap - 18) playerStroke = 2
+      form.querySelector('.player-stroke').innerText = `+${playerStroke}`
+      form.action = score.url;
+      const token = form.querySelector('[name="authenticity_token"]')
+      token.value = csrfToken;
+      const matchId = form.querySelector('[name="score[match_id]"]')
+      matchId.value = score.match_id
+      matchId.disabled = false
+      const playerId = form.querySelector('[name="score[player_id]"]')
+      playerId.value = score.player_id
+      playerId.disabled = false
+      const holeId = form.querySelector('[name="score[hole_id]"]')
+      holeId.value = score.hole_id
+      holeId.disabled = false
+      const puttCount = form.querySelector('[name="score[putt_count]"]')
+      puttCount.value = score.putt_count || ''
+      puttCount.disabled = false
+      const lostBallCount = form.querySelector('[name="score[lost_ball_count]"]')
+      lostBallCount.value = score.lost_ball_count || ''
+      lostBallCount.disabled = false
+      const totalCount = form.querySelector('[name="score[total_count]"]')
+      totalCount.value = score.total_count || ''
+      totalCount.disabled = false
+    })
+
+    const params = new URLSearchParams(document.location.search);
+    params.set('score[hole_id]', hole.id)
+    history.replaceState(null, null, "?" + params.toString());
+    e.relatedTarget.querySelector('.hole-par').innerText = hole.par
+    e.relatedTarget.querySelector('.hole-stroke').innerText = hole.stroke
+
   })
 </script>

@@ -4,11 +4,24 @@ class ScoresController < AuthenticatedController
   # GET /scores or /scores.json
   def index
     @match = Match.find(params[:match_id])
-    if params[:hole_number]
-      hole = Hole.find_by(course_id: @match.course_id, number: params[:hole_number])
-      @scores = Score.where(match_id: params[:match_id], hole_id: hole.id)
-    else
-      @scores = Score.where(match_id: params[:match_id]).group(:player_id)
+
+    respond_to do |format|
+      if params[:hole_number]
+        hole = Hole.find_by(course_id: @match.course_id, number: params[:hole_number])
+        @scores = Score.where(match_id: params[:match_id], hole_id: hole.id)
+        format.json do
+          render json: {
+            hole: hole,
+            scores: @scores.map do |score|
+              score.as_json.merge(url: score_url(score, format: :json))
+            end
+          }.as_json
+        end
+      else
+        format.html do
+          @scores = Score.where(match_id: params[:match_id]).group(:player_id)
+        end
+      end
     end
  end
 
