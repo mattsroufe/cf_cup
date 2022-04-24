@@ -24,7 +24,7 @@
         </div>
         <ul class="players row list-group list-group-flush">
           <% @players.each do |player| %>
-            <%= render "form", player: player, score: player.scores.find_by!(match_id: @match.id, hole_id: @hole.id) %>
+            <%= render "form", player: player, score: @scores.find { |s| s.match_id == @match.id && s.hole_id == @hole.id && s.player_id == player.id } %>
           <% end %>
         </ul>
         </div>
@@ -137,8 +137,8 @@
         const score = scores.find(s => s.player_id == form.dataset.playerId)
         const playerHandicap = parseInt(form.dataset.playerHandicap)
         let playerStroke = 0
-        if (hole.stroke < playerHandicap) playerStroke = 1 
-        if (hole.stroke < playerHandicap - 18) playerStroke = 2
+        if (hole.stroke <= playerHandicap) playerStroke = 1 
+        if (hole.stroke <= playerHandicap - 18) playerStroke = 2
         form.querySelector('.player-stroke').innerText = `+${playerStroke}`
         form.action = score.url;
         const matchId = form.querySelector('[name="score[match_id]"]')

@@ -1,13 +1,13 @@
 class AuthenticatedController < ApplicationController
-  LOCAL_USER = 'money'
-  around_action :set_local_user
+  before_action :set_current_player
+
+  def current_player
+    @current_player
+  end
 
   private
 
-  def set_local_user
-    ActiveRecord::Base.transaction do
-      ActiveRecord::Base.connection.execute("SET LOCAL ROLE #{session[:username]}")
-      yield
-    end
+  def set_current_player
+    @current_user = Player.find_by!(username: session[:username])
   end
 end

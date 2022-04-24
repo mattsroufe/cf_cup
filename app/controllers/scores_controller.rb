@@ -18,9 +18,10 @@ class ScoresController < AuthenticatedController
 
   # GET /scores/new
   def new
-    @match = Match.find(score_params[:match_id])
+    @match = Match.where(id: score_params[:match_id]).includes(:teams).first!
     @hole = Hole.find(score_params[:hole_id])
-    @players = @match.teams.flat_map(&:players)
+    @players = Player.where(team_id: @match.teams.pluck(:id))
+    @scores = Score.where(match_id: @match.id, hole_id: @hole.id, player_id: @players.ids)
   end
 
   # GET /scores/1/edit
