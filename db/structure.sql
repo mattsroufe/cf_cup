@@ -97,7 +97,7 @@ CREATE TABLE public.players (
     strengths text,
     weaknesses text,
     handicap_text character varying,
-    handicap numeric,
+    handicap numeric NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     best_moment text,
@@ -262,6 +262,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220416190052'),
 ('20220424085406'),
 ('20220424085825'),
-('20220424093839');
+('20220424093839'),
+('20220424193150');
 
 
