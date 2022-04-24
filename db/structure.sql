@@ -402,17 +402,17 @@ CREATE UNIQUE INDEX index_scores_on_match_id_and_hole_id_and_player_id ON public
 
 
 --
--- Name: scores player_scores; Type: POLICY; Schema: public; Owner: -
---
-
-CREATE POLICY player_scores ON public.scores FOR SELECT USING (true);
-
-
---
 -- Name: scores; Type: ROW SECURITY; Schema: public; Owner: -
 --
 
 ALTER TABLE public.scores ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: scores view_all_player_scores; Type: POLICY; Schema: public; Owner: -
+--
+
+CREATE POLICY view_all_player_scores ON public.scores FOR SELECT USING (true);
+
 
 --
 -- PostgreSQL database dump complete
