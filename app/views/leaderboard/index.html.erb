@@ -21,10 +21,11 @@
         <% adjusted_par += 1 if hole.stroke <= player.handicap %>
         <% adjusted_par += 2 if hole.stroke <= player.handicap - 18 %>
         <% player_score = 0 %>
-        <% player_score += 1 if score.total_count == adjusted_par %>
-        <% player_score += 2 if score.total_count == adjusted_par - 1 %>
-        <% player_score += 3 if score.total_count == adjusted_par - 2 %>
-        <% player_score += 4 if score.total_count == adjusted_par - 3 %>
+        <% player_score += 1 if score.total_count == adjusted_par + 1 %>
+        <% player_score += 2 if score.total_count == adjusted_par %>
+        <% player_score += 3 if score.total_count == adjusted_par - 1 %>
+        <% player_score += 4 if score.total_count == adjusted_par - 2 %>
+        <% player_score += 5 if score.total_count == adjusted_par - 3 %>
         <% total_score += player_score %>
       <% end %>
     <% end %>
