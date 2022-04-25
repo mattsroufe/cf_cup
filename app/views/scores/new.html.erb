@@ -159,6 +159,7 @@
       const totalCount = form.querySelector('[name="score[total_count]"]')
       totalCount.value = score.total_count || ''
       totalCount.disabled = false
+      totalCount.dataset.par = hole.par
     })
 
     const params = new URLSearchParams(document.location.search);
