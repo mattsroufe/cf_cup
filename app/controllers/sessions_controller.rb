@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
   def create
     player = Player.find_by!(username: params[:username])
     if player
-      session[:username] = player.username
+      cookies.permanent[:username] = player.username
       redirect_to matches_path
     else
       flash.now.alert = “username”

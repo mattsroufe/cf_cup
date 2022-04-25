@@ -8,6 +8,6 @@ class AuthenticatedController < ApplicationController
   private
 
   def set_current_player
-    @current_user = Player.find_by!(username: session[:username])
+    @current_user = Player.find_by!(username: cookies.permanent[:username])
   end
 end
