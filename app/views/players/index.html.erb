@@ -1,6 +1,4 @@
-<p style="color: green"><%= notice %></p>
-
-<h1 class="logo text-center">Players</h1>
+<h1 class="logo text-center my-3">Players</h1>
 <%= render 'nav' %>
 
 <div id="players" style="background:white">
@@ -8,7 +6,7 @@
     <%= link_to player, style: "display:flex; padding:8px; border-bottom:1px solid lightgray; text-decoration:none; color:inherit" do %>
       <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
       &emsp;
-      <h3 style="font-weight:400"><%= player.first_name %> <%= player.last_name %></h3>
+      <h4 class="mt-3"><%= player.first_name %> <%= player.last_name %></h4>
     <% end %>
   <% end %>
 </div>

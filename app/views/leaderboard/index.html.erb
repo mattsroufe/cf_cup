@@ -1,2 +1,43 @@
 <h1 class="logo my-3 text-center">Leaderboard</h1>
 <%= render 'nav' %>
+
+<div style="background:white; margin: 16px 8px; overflow-x:scroll; display:flex; flex-direction:column; border-radius: 8px; box-shadow: var(--box-shadow); ">
+<table class="text-center">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Team</th>
+      <th>Score</th>
+    </tr>
+  </thead>
+  <% team_totals = {} %>
+  <% Team.all.each.with_index(1) do |team, i| %>
+    <% total_score = 0 %>
+    <% team.players.each do |player| %>
+      <% Score.where(player_id: player.id).each do |score| %>
+        <% next unless score.total_count.present? %>
+        <% hole = @holes.find { |h| h.id == score.hole_id } %>
+        <% adjusted_par = hole.par %>
+        <% adjusted_par += 1 if hole.stroke <= player.handicap %>
+        <% adjusted_par += 2 if hole.stroke <= player.handicap - 18 %>
+        <% player_score = 0 %>
+        <% player_score += 1 if score.total_count == adjusted_par %>
+        <% player_score += 2 if score.total_count == adjusted_par - 1 %>
+        <% player_score += 3 if score.total_count == adjusted_par - 2 %>
+        <% player_score += 4 if score.total_count == adjusted_par - 3 %>
+        <% total_score += player_score %>
+      <% end %>
+    <% end %>
+    <% team_totals[team.id] = total_score %>
+  <% end %>
+  <% team_totals.sort_by { |k, v| v }.reverse.each.with_index(1) do |(team_id, total), i| %>
+    <tr>
+      <td style="width: 20%; text-align:center; border-top: 1px solid lightgray;"><%= i %></td>
+      <td style="width: 60%; text-align:center; border-top: 1px solid lightgray;"><%= Team.find(team_id).name %></td>
+      <td style="width: 20%; text-align:center; border-top: 1px solid lightgray;"><%= total %></td>
+    </tr>
+  <% end %>
+</table>
+</div>
+<div>
+
