@@ -30,9 +30,14 @@
       <td style="text-align:center; border-top: 1px solid lightgray;"><%= link_to hole.number, new_score_path(score: { match_id: @match.id, hole_id: hole.id }) %></td>
       <td style="text-align:center; border-top: 1px solid lightgray;"><%= hole.stroke %></td>
       <td style="text-align:center; border-top: 1px solid lightgray;"><%= hole.par %></td>
+      <% hole_scores = @scorecard.group_by(&:number) %>
       <% @players.each do |player| %>
         <td style="text-align:center; border-top: 1px solid lightgray;">
-          <%= @scores.find { |s| s.hole_id == hole.id && s.player_id == player.id }.total_count %>
+          <% score = hole_scores[hole.number].find { |s| s.player_id == player.id } %>
+          <%= score.total_count %>
+          <% if score.points > 0 %>
+            (<%= score.points %>)
+          <% end %>
         </td>
       <% end %>
     </tr>
@@ -42,7 +47,8 @@
     <td style="text-align:center; border-top: 1px solid lightgray;"></td>
     <td style="text-align:center; border-top: 1px solid lightgray;"></td>
     <% @players.each do |player| %>
-      <td style="text-align:center; border-top: 1px solid lightgray;"><%= @scores.select { |s| s.player_id == player.id }.map(&:total_count).compact.sum %></td>
+      <% player_scores = @scorecard.select { |s| s.player_id == player.id } %>
+      <td style="text-align:center; border-top: 1px solid lightgray;"><%= player_scores.map(&:total_count).compact.sum %> (<%= player_scores.map(&:points).compact.sum %>)</td>
     <% end %>
   </tr>
 </table>

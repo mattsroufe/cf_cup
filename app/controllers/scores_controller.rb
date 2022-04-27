@@ -20,7 +20,7 @@ class ScoresController < ApplicationController
       else
         format.html do
           @players = Player.where(team_id: @match.teams.pluck(:id))
-          @scores = Score.where(match_id: params[:match_id])
+          @scorecard = Scorecard.where(match_id: params[:match_id])
         end
       end
     end
