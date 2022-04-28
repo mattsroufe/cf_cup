@@ -1,3 +1,5 @@
+<% team_scores = @match.teams.ids.zip([0,0]).to_h %>
+<%  player_stabbies = @players.ids.zip([0,0,0,0]).to_h %>
 <h1 class="logo text-center my-3">Scorecard</h1>
   <%= render 'nav' %>
  
@@ -33,22 +35,49 @@
       <% hole_scores = @scorecard.group_by(&:number) %>
       <% @players.each do |player| %>
         <td style="text-align:center; border-top: 1px solid lightgray;">
+          <% scores = hole_scores[hole.number].map(&:points) %>
+          <% high_score = scores.max %>
           <% score = hole_scores[hole.number].find { |s| s.player_id == player.id } %>
-          <%= score.total_count %>
-          <% if score.points > 0 %>
-            (<%= score.points %>)
+
+          <% if scores.select { |i| i == high_score }.count == 1 && score.points == high_score %>
+            <% team_scores[player.team_id] += score.points %>
+            <% player_stabbies[player.id] += score.points %>
+            <div class="fw-bold">
+              <%= score.total_count %>
+              <% if score.points > 0 %>
+                (<%= score.points %>)
+              <% end %>
+            </div>
+          <% else %>
+            <div>
+              <%= score.total_count %>
+              <% if score.points > 0 %>
+                (<%= score.points %>)
+              <% end %>
+            </div>
           <% end %>
+
         </td>
       <% end %>
     </tr>
   <% end %>
   <tr>
-    <td style="text-align:center; border-top: 1px solid lightgray;">Total</td>
+    <td style="text-align:center; border-top: 1px solid lightgray;"></td>
     <td style="text-align:center; border-top: 1px solid lightgray;"></td>
     <td style="text-align:center; border-top: 1px solid lightgray;"></td>
     <% @players.each do |player| %>
       <% player_scores = @scorecard.select { |s| s.player_id == player.id } %>
-      <td style="text-align:center; border-top: 1px solid lightgray;"><%= player_scores.map(&:total_count).compact.sum %> (<%= player_scores.map(&:points).compact.sum %>)</td>
+      <td style="text-align:center; border-top: 1px solid lightgray;"><%= player_scores.map(&:total_count).compact.sum %> (<%= player_stabbies[player.id] %>)</td>
+    <% end %>
+  </tr>
+  <tr>
+    <td style="text-align:center; border-top: 1px solid lightgray;">Total</td>
+    <td style="text-align:center; border-top: 1px solid lightgray;"></td>
+    <td style="text-align:center; border-top: 1px solid lightgray;"></td>
+    <% @match.teams.order(:id).each do |team| %>
+      <td colspan="2" style="text-align:center; border-top: 1px solid lightgray;">
+        <%= team_scores[team.id] %>
+      </td>
     <% end %>
   </tr>
 </table>

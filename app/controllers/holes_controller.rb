@@ -3,7 +3,7 @@ class HolesController < ApplicationController
 
   # GET /holes or /holes.json
   def index
-    @holes = Hole.where(course_id: params[:course_id], number: params[:number])
+    @holes = Hole.all.order(:number)
   end
 
   # GET /holes/1 or /holes/1.json
@@ -65,6 +65,6 @@ class HolesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def hole_params
-      params.require(:hole).permit(:course_id, :par, :stroke)
+      params.require(:hole).permit(:course_id, :par, :stroke, :meters, :number)
     end
 end
