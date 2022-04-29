@@ -1,5 +1,5 @@
 <% team_scores = @match.teams.ids.zip([0,0]).to_h %>
-<%  player_stabbies = @players.ids.zip([0,0,0,0]).to_h %>
+<% player_stabbies = @players.ids.zip([0,0,0,0]).to_h %>
 <h1 class="logo text-center my-3">Scorecard</h1>
   <%= render 'nav' %>
  
@@ -35,11 +35,11 @@
       <% hole_scores = @scorecard.group_by(&:number) %>
       <% @players.each do |player| %>
         <td style="text-align:center; border-top: 1px solid lightgray;">
-          <% scores = hole_scores[hole.number].map(&:points) %>
-          <% high_score = scores.max %>
           <% score = hole_scores[hole.number].find { |s| s.player_id == player.id } %>
+          <% team_scores_for_hole = hole_scores[hole.number].select { |s| s.player_id.in? player.team.players.ids } %>
+          <% highest_team_score = team_scores_for_hole.sort_by(&:points).last %>
 
-          <% if scores.select { |i| i == high_score }.count == 1 && score.points == high_score %>
+          <% if score == highest_team_score %>
             <% team_scores[player.team_id] += score.points %>
             <% player_stabbies[player.id] += score.points %>
             <div class="fw-bold">
