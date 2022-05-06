@@ -284,26 +284,6 @@ ALTER TABLE ONLY public.teams
 
 
 --
--- Name: scores; Type: ROW SECURITY; Schema: public; Owner: -
---
-
-ALTER TABLE public.scores ENABLE ROW LEVEL SECURITY;
-
---
--- Name: scores update_match_score; Type: POLICY; Schema: public; Owner: -
---
-
-CREATE POLICY update_match_score ON public.scores USING (('money'::name = CURRENT_USER));
-
-
---
--- Name: scores view_all_player_scores; Type: POLICY; Schema: public; Owner: -
---
-
-CREATE POLICY view_all_player_scores ON public.scores FOR SELECT USING (true);
-
-
---
 -- PostgreSQL database dump complete
 --
 
