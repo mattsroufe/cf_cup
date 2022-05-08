@@ -284,6 +284,14 @@ ALTER TABLE ONLY public.teams
 
 
 --
+-- Name: holes fk_rails_6d0dd30f7d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.holes
+    ADD CONSTRAINT fk_rails_6d0dd30f7d FOREIGN KEY (course_id) REFERENCES public.courses(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -308,6 +316,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220424085825'),
 ('20220424093839'),
 ('20220424193150'),
-('20220427075713');
+('20220427075713'),
+('20220508053131');
 
 
