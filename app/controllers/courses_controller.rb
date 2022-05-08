@@ -1,5 +1,8 @@
+require 'uri'
+require 'net/http'
+
 class CoursesController < ApplicationController
-  before_action :set_course, only: %i[ show edit update destroy ]
+  before_action :set_course, only: %i[ edit update destroy ]
 
   # GET /courses or /courses.json
   def index
@@ -8,6 +11,13 @@ class CoursesController < ApplicationController
 
   # GET /courses/1 or /courses/1.json
   def show
+    hmac_secret = Rails.application.secrets.secret_key_base.to_s
+
+    token = JWT.encode({ role: 'cf_cup_app' }, hmac_secret, 'HS256')
+    uri = URI("http://localhost:3000/courses?id=eq.#{params[:id]}&select=name,holes(number,par,stroke)&holes.order=number")
+    req = Net::HTTP::Get.new(uri.to_s, {'Authorization' => "Bearer #{token}"})
+    res = Net::HTTP.start(uri.host,uri.port) { |http| http.request(req) }
+    @course = JSON.parse(res.body).first
   end
 
   # GET /courses/new

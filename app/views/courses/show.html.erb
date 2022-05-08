@@ -1,6 +1,6 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @course %>
+<pre><%= JSON.pretty_generate(@course) %></pre>
 
 <div>
   <%= link_to "Edit this course", edit_course_path(@course) %> |
