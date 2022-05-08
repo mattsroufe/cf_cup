@@ -14,7 +14,7 @@ class CoursesController < ApplicationController
     hmac_secret = ENV["SECRET_KEY_BASE"]
 
     token = JWT.encode({ role: 'cf_cup_app' }, hmac_secret, 'HS256')
-    uri = URI("http://localhost:3000/courses?id=eq.#{params[:id]}&select=name,holes(number,par,stroke)&holes.order=number")
+    uri = URI("#{Rails.application.config.api_url}/courses?id=eq.#{params[:id]}&select=name,holes(number,par,stroke)&holes.order=number")
     req = Net::HTTP::Get.new(uri.to_s, {'Authorization' => "Bearer #{token}"})
     res = Net::HTTP.start(uri.host,uri.port) { |http| http.request(req) }
     @course = JSON.parse(res.body).first
