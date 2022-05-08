@@ -11,7 +11,7 @@ class CoursesController < ApplicationController
 
   # GET /courses/1 or /courses/1.json
   def show
-    hmac_secret = Rails.application.secrets.secret_key_base.to_s
+    hmac_secret = ENV["SECRET_KEY_BASE"]
 
     token = JWT.encode({ role: 'cf_cup_app' }, hmac_secret, 'HS256')
     uri = URI("http://localhost:3000/courses?id=eq.#{params[:id]}&select=name,holes(number,par,stroke)&holes.order=number")
