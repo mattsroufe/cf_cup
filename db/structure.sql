@@ -292,6 +292,38 @@ ALTER TABLE ONLY public.holes
 
 
 --
+-- Name: match_teams fk_rails_82ba98b0ef; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.match_teams
+    ADD CONSTRAINT fk_rails_82ba98b0ef FOREIGN KEY (team_id) REFERENCES public.teams(id);
+
+
+--
+-- Name: match_teams fk_rails_8742c22c55; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.match_teams
+    ADD CONSTRAINT fk_rails_8742c22c55 FOREIGN KEY (match_id) REFERENCES public.matches(id);
+
+
+--
+-- Name: players fk_rails_8880a915a5; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.players
+    ADD CONSTRAINT fk_rails_8880a915a5 FOREIGN KEY (team_id) REFERENCES public.teams(id);
+
+
+--
+-- Name: matches fk_rails_e250e03790; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.matches
+    ADD CONSTRAINT fk_rails_e250e03790 FOREIGN KEY (course_id) REFERENCES public.courses(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -317,6 +349,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220424093839'),
 ('20220424193150'),
 ('20220427075713'),
-('20220508053131');
+('20220508053131'),
+('20220508184027');
 
 
