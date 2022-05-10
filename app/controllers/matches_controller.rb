@@ -5,10 +5,15 @@ class MatchesController < ApplicationController
   def index
     hmac_secret = ENV["SECRET_KEY_BASE"]
     token = JWT.encode({ role: 'cf_cup_app' }, hmac_secret, 'HS256')
-    uri = URI("#{Rails.application.config.api_url}/matches?select=id,date,teams(name,players(username)),courses(name)&order=date")
-    req = Net::HTTP::Get.new(uri.to_s, {'Authorization' => "Bearer #{token}"})
-    res = Net::HTTP.start(uri.host,uri.port) { |http| http.request(req) }
-    @matches = JSON.parse(res.body)
+    url = "#{Rails.application.config.api_url}/matches?select=id,date,teams(name,players(username)),courses(name)&order=date"
+    headers = { 'Authorization' => "Bearer #{token}" }
+    response = HTTParty.get(url, headers: headers, logger: Rails.logger, log_level: :info)
+    if response.success?
+      @matches = JSON.parse(response.body)
+    else
+      Rails.logger.error(response.body)
+      raise ActionController::RoutingError.new('Not Found')
+    end
   end
 
   # GET /matches/1 or /matches/1.json
