@@ -284,6 +284,14 @@ ALTER TABLE ONLY public.teams
 
 
 --
+-- Name: scores fk_rails_3c6cd6d6f8; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scores
+    ADD CONSTRAINT fk_rails_3c6cd6d6f8 FOREIGN KEY (match_id) REFERENCES public.matches(id);
+
+
+--
 -- Name: holes fk_rails_6d0dd30f7d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -350,6 +358,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220424193150'),
 ('20220427075713'),
 ('20220508053131'),
-('20220508184027');
+('20220508184027'),
+('20220511080405');
 
 
