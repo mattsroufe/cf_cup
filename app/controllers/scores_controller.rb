@@ -82,7 +82,7 @@ class ScoresController < ApplicationController
     respond_to do |format|
       if @score.update(score_params)
         format.html { redirect_to new_score_path(score: { match_id: @score.match_id, hole_id: @score.hole_id }), notice: "Score was successfully updated." }
-        format.json { render json: @score }
+        format.json { render json: @score, status: :ok }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @score.errors, status: :unprocessable_entity }
