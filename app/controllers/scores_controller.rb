@@ -3,6 +3,7 @@ class ScoresController < ApplicationController
 
   # GET /scores or /scores.json
   def index
+    @match = Match.find(params[:match_id])
     @model = Scorecard.select("
       hole_id,
       number,
@@ -38,8 +39,8 @@ class ScoresController < ApplicationController
         end
       else
         format.html do
-          @players = Player.none # Player.where(team_id: @match.teams.pluck(:id)).order(:team_id)
-          @scorecard = nil # Scorecard.where(match_id: params[:match_id])
+          @players = Player.where(team_id: @match.teams.pluck(:id)).order(:team_id)
+          @scorecard = Scorecard.where(match_id: params[:match_id])
         end
       end
     end
@@ -81,7 +82,7 @@ class ScoresController < ApplicationController
     respond_to do |format|
       if @score.update(score_params)
         format.html { redirect_to new_score_path(score: { match_id: @score.match_id, hole_id: @score.hole_id }), notice: "Score was successfully updated." }
-        format.json { render :show, status: :ok, location: @score }
+        format.json { render json: @score }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @score.errors, status: :unprocessable_entity }

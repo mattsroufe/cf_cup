@@ -1,11 +1,10 @@
-<%# team_scores = @match.teams.ids.zip([0,0]).to_h %>
-<%# player_stabbies = @players.ids.zip([0,0,0,0]).to_h %>
+<% team_scores = @match.teams.ids.zip([0,0]).to_h %>
+<% player_stabbies = @players.ids.zip([0,0,0,0]).to_h %>
 <h1 class="logo text-center my-3">Scorecard</h1>
   <%= render 'nav' %>
  
 <div style="background:white; margin: 16px 8px; overflow-x:scroll; display:flex; flex-direction:column; border-radius: 8px; box-shadow: var(--box-shadow); ">
-<pre><%= JSON.pretty_generate(@model.as_json) %></pre>
-<% if false %>
+<pre><%#= JSON.pretty_generate(@model.as_json) %></pre>
 <table class="text-center">
   <thead>
     <tr>
@@ -89,4 +88,3 @@
 <div style="margin-bottom: 32px; text-align:center">
   <%= link_to "Back to matches", matches_path %>
 </div>
-<% end %>

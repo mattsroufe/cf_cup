@@ -68,6 +68,7 @@
 
   document.querySelectorAll('.players').forEach(section => {
     section.querySelectorAll('form').forEach(form => {
+      console.log(form)
     form.addEventListener('submit', e => {
       const formData = new FormData(form)
       fetch(form.action, {
@@ -78,11 +79,13 @@
     })
     form.querySelectorAll('select').forEach(select => {
       select.addEventListener('change', e => {
-        form.dispatchEvent(new Event('submit'));
+        var evt = new CustomEvent("submit", {"bubbles":true, "cancelable": true});
+        form.dispatchEvent(evt);
       });
     })
     form.querySelector('input[type="number"]').addEventListener('change', e => {
-      form.dispatchEvent(new Event('submit'));
+      var evt = new CustomEvent("submit", {"bubbles":true, "cancelable": true});
+      form.dispatchEvent(evt);
     })
     form.querySelectorAll('[data-target]').forEach(button => {
       button.addEventListener('click', e => {
