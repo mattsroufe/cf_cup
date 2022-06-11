@@ -16,6 +16,13 @@ SET row_security = off;
 CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
 
 
+--
+-- Name: EXTENSION pgcrypto; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -40,7 +47,7 @@ CREATE TABLE public.courses (
     name character varying,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL
+    id uuid DEFAULT gen_random_uuid() NOT NULL
 );
 
 
@@ -55,8 +62,8 @@ CREATE TABLE public.holes (
     number integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    course_id uuid DEFAULT public.gen_random_uuid() NOT NULL
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    course_id uuid DEFAULT gen_random_uuid() NOT NULL
 );
 
 
@@ -67,9 +74,9 @@ CREATE TABLE public.holes (
 CREATE TABLE public.match_teams (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    match_id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    team_id uuid DEFAULT public.gen_random_uuid() NOT NULL
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    match_id uuid DEFAULT gen_random_uuid() NOT NULL,
+    team_id uuid DEFAULT gen_random_uuid() NOT NULL
 );
 
 
@@ -81,8 +88,8 @@ CREATE TABLE public.matches (
     date date,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    course_id uuid DEFAULT public.gen_random_uuid() NOT NULL
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    course_id uuid DEFAULT gen_random_uuid() NOT NULL
 );
 
 
@@ -104,8 +111,8 @@ CREATE TABLE public.players (
     nick_name character varying,
     home_club character varying,
     trophies character varying,
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    team_id uuid DEFAULT public.gen_random_uuid() NOT NULL
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    team_id uuid DEFAULT gen_random_uuid() NOT NULL
 );
 
 
@@ -128,10 +135,10 @@ CREATE TABLE public.scores (
     updated_at timestamp(6) without time zone NOT NULL,
     putt_count integer,
     lost_ball_count integer,
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    match_id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    hole_id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    player_id uuid DEFAULT public.gen_random_uuid() NOT NULL
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    match_id uuid DEFAULT gen_random_uuid() NOT NULL,
+    hole_id uuid DEFAULT gen_random_uuid() NOT NULL,
+    player_id uuid DEFAULT gen_random_uuid() NOT NULL
 );
 
 
@@ -207,7 +214,7 @@ CREATE TABLE public.teams (
     name character varying,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL
+    id uuid DEFAULT gen_random_uuid() NOT NULL
 );
 
 
