@@ -1,29 +1,29 @@
-<%= content_tag :div, id: match.fetch('id'), style: "text-align:center; background-color: white; padding: 16px 0; margin: 16px 8px; border-radius: 8px; box-shadow: var(--box-shadow)" do %>
-  <h4 style="margin:0 0 8px; text-align:center; border-bottom: 1px solid lightgray; padding-bottom: 8px;"><%= match.fetch('date') %> - <%= match.fetch('courses').fetch('name') %></h3>
-  <% match.fetch('teams')[0].tap do |team| %>
+<%= content_tag :div, id: dom_id(match), style: "text-align:center; background-color: white; padding: 16px 0; margin: 16px 8px; border-radius: 8px; box-shadow: var(--box-shadow)" do %>
+  <h4 style="margin:0 0 8px; text-align:center; border-bottom: 1px solid lightgray; padding-bottom: 8px;"><%= match.date.strftime('%-d %b') %> - <%= match.course.name %></h3>
+  <% match.teams[0].tap do |team| %>
     <div style="display:flex; justify-content:space-around;" >
-      <% team.fetch('players')[0].tap do |player| %>
-        <%= image_tag "#{player.fetch('username')}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
+      <% team.players[0].tap do |player| %>
+        <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
       <% end %>
       <div style="display:flex; flex-direction:column; justify-content:center">
-        <%= team.fetch('name') %>
+        <%= team.name %>
       </div>
-      <% team.fetch('players')[1].tap do |player| %>
-        <%= image_tag "#{player.fetch('username')}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
+      <% team.players[1].tap do |player| %>
+        <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
       <% end %>
     </div>
   <% end %>
   <div style="text-align:center">vs</div>
-  <% match.fetch('teams')[1].tap do |team| %>
+  <% match.teams[1].tap do |team| %>
     <div style="display:flex; justify-content:space-around;" >
-      <% team.fetch('players')[0].tap do |player| %>
-        <%= image_tag "#{player.fetch('username')}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
+      <% team.players[0].tap do |player| %>
+        <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
       <% end %>
       <div style="display:flex; flex-direction:column; justify-content:center">
-        <%= team.fetch('name') %>
+        <%= team.name %>
       </div>
-      <% team.fetch('players')[1].tap do |player| %>
-        <%= image_tag "#{player.fetch('username')}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
+      <% team.players[1].tap do |player| %>
+        <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
       <% end %>
     </div>
   <% end %>

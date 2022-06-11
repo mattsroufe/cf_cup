@@ -3,17 +3,7 @@ class MatchesController < ApplicationController
 
   # GET /matches or /matches.json
   def index
-    hmac_secret = ENV["SECRET_KEY_BASE"]
-    token = JWT.encode({ role: 'cf_cup_app' }, hmac_secret, 'HS256')
-    url = "#{Rails.application.config.api_url}/matches?select=id,date,teams(name,players(username)),courses(name)&order=date"
-    headers = { 'Authorization' => "Bearer #{token}" }
-    response = HTTParty.get(url, headers: headers, logger: Rails.logger, log_level: :info)
-    if response.success?
-      @matches = JSON.parse(response.body)
-    else
-      Rails.logger.error(response.body)
-      raise ActionController::RoutingError.new('Not Found')
-    end
+    @matches = Match.all
   end
 
   # GET /matches/1 or /matches/1.json

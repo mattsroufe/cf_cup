@@ -2,9 +2,9 @@
 <%= render 'nav' %>
 
 <div id="matches">
-  <% @matches.each do |match| %>
-    <%= link_to scores_path(match_id: match.fetch('id')), style: "text-decoration:none; color:inherit" do %>
-      <%= render partial: 'match', locals: { match: match } %>
+  <% @matches.order(:date).each do |match| %>
+    <%= link_to scores_path(match_id: match.id), style: "text-decoration:none; color:inherit" do %>
+      <%= render match %>
     <% end %>
   <% end %>
 </div>
