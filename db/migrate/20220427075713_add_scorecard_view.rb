@@ -1,6 +1,5 @@
 class AddScorecardView < ActiveRecord::Migration[7.0]
   def up
-=begin
     ActiveRecord::Base.connection.execute "
       CREATE OR REPLACE VIEW scorecards AS
       WITH scores_with_adjusted_par AS (
@@ -31,7 +30,6 @@ class AddScorecardView < ActiveRecord::Migration[7.0]
         END AS points
       FROM scores_with_adjusted_par
     ;"
-=end
   end
 
   def down
