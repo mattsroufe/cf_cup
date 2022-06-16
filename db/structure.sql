@@ -34,8 +34,8 @@ SET default_table_access_method = heap;
 CREATE TABLE public.ar_internal_metadata (
     key character varying NOT NULL,
     value character varying,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
 );
 
 
@@ -45,8 +45,8 @@ CREATE TABLE public.ar_internal_metadata (
 
 CREATE TABLE public.courses (
     name character varying,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     id uuid DEFAULT gen_random_uuid() NOT NULL
 );
 
@@ -60,8 +60,8 @@ CREATE TABLE public.holes (
     stroke integer,
     meters integer,
     number integer,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     course_id uuid DEFAULT gen_random_uuid() NOT NULL
 );
@@ -72,8 +72,8 @@ CREATE TABLE public.holes (
 --
 
 CREATE TABLE public.match_teams (
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     match_id uuid DEFAULT gen_random_uuid() NOT NULL,
     team_id uuid DEFAULT gen_random_uuid() NOT NULL
@@ -86,8 +86,8 @@ CREATE TABLE public.match_teams (
 
 CREATE TABLE public.matches (
     date date,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     course_id uuid DEFAULT gen_random_uuid() NOT NULL
 );
@@ -105,8 +105,8 @@ CREATE TABLE public.players (
     weaknesses text,
     handicap_text character varying,
     handicap numeric NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     best_moment text,
     nick_name character varying,
     home_club character varying,
@@ -131,8 +131,8 @@ CREATE TABLE public.schema_migrations (
 
 CREATE TABLE public.scores (
     total_count integer,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     putt_count integer,
     lost_ball_count integer,
     id uuid DEFAULT gen_random_uuid() NOT NULL,
@@ -143,77 +143,13 @@ CREATE TABLE public.scores (
 
 
 --
--- Name: scorecards; Type: VIEW; Schema: public; Owner: -
---
-
-CREATE VIEW public.scorecards AS
- WITH scores_with_adjusted_par AS (
-         SELECT scores.total_count,
-            scores.created_at,
-            scores.updated_at,
-            scores.putt_count,
-            scores.lost_ball_count,
-            scores.id,
-            scores.match_id,
-            scores.hole_id,
-            scores.player_id,
-            holes.par,
-            holes.stroke,
-            holes.meters,
-            holes.number,
-            holes.created_at,
-            holes.updated_at,
-            holes.id,
-            holes.course_id,
-            players.first_name,
-            players.last_name,
-            players.username,
-            players.strengths,
-            players.weaknesses,
-            players.handicap_text,
-            players.handicap,
-            players.created_at,
-            players.updated_at,
-            players.best_moment,
-            players.nick_name,
-            players.home_club,
-            players.trophies,
-            players.id,
-            players.team_id,
-                CASE
-                    WHEN ((holes.stroke)::numeric <= players.handicap) THEN (holes.par + 1)
-                    WHEN ((holes.stroke)::numeric <= (players.handicap - (18)::numeric)) THEN (holes.par + 2)
-                    ELSE holes.par
-                END AS adjusted_par
-           FROM ((public.scores
-             JOIN public.holes ON ((scores.hole_id = holes.id)))
-             JOIN public.players ON ((scores.player_id = players.id)))
-        )
- SELECT scores_with_adjusted_par.number,
-    scores_with_adjusted_par.total_count,
-    scores_with_adjusted_par.adjusted_par,
-    scores_with_adjusted_par.match_id,
-    scores_with_adjusted_par.hole_id,
-    scores_with_adjusted_par.player_id,
-        CASE
-            WHEN (scores_with_adjusted_par.total_count = (scores_with_adjusted_par.adjusted_par + 1)) THEN 1
-            WHEN (scores_with_adjusted_par.total_count = scores_with_adjusted_par.adjusted_par) THEN 2
-            WHEN (scores_with_adjusted_par.total_count = (scores_with_adjusted_par.adjusted_par - 1)) THEN 3
-            WHEN (scores_with_adjusted_par.total_count = (scores_with_adjusted_par.adjusted_par - 2)) THEN 4
-            WHEN (scores_with_adjusted_par.total_count = (scores_with_adjusted_par.adjusted_par - 3)) THEN 5
-            ELSE 0
-        END AS points
-   FROM scores_with_adjusted_par scores_with_adjusted_par(total_count, created_at, updated_at, putt_count, lost_ball_count, id, match_id, hole_id, player_id, par, stroke, meters, number, created_at_1, updated_at_1, id_1, course_id, first_name, last_name, username, strengths, weaknesses, handicap_text, handicap, created_at_2, updated_at_2, best_moment, nick_name, home_club, trophies, id_2, team_id, adjusted_par);
-
-
---
 -- Name: teams; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.teams (
     name character varying,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     id uuid DEFAULT gen_random_uuid() NOT NULL
 );
 
@@ -366,6 +302,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220427075713'),
 ('20220508053131'),
 ('20220508184027'),
-('20220511080405');
+('20220511080405'),
+('20220616180842');
 
 
