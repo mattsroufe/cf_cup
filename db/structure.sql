@@ -82,6 +82,20 @@ CREATE TABLE public.holes (
 
 
 --
+-- Name: match_players; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.match_players (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    match_id uuid NOT NULL,
+    player_id uuid NOT NULL,
+    handicap numeric NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
+);
+
+
+--
 -- Name: match_teams; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -257,6 +271,14 @@ ALTER TABLE ONLY public.holes
 
 
 --
+-- Name: match_players match_players_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.match_players
+    ADD CONSTRAINT match_players_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: match_teams match_teams_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -302,6 +324,20 @@ ALTER TABLE ONLY public.scores
 
 ALTER TABLE ONLY public.teams
     ADD CONSTRAINT teams_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_match_players_on_match_id_and_player_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_match_players_on_match_id_and_player_id ON public.match_players USING btree (match_id, player_id);
+
+
+--
+-- Name: index_match_players_on_player_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_match_players_on_player_id ON public.match_players USING btree (player_id);
 
 
 --
@@ -382,6 +418,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220508184027'),
 ('20220511080405'),
 ('20220616180842'),
-('20220616192358');
+('20220616192358'),
+('20220616232225');
 
 
