@@ -43,14 +43,14 @@
             <% team_scores[player.team_id] += score.points %>
             <% player_stabbies[player.id] += score.points %>
             <div class="fw-bold">
-              <%= score.total_count %>
+              <%= score.gross_score %>
               <% if score.points > 0 %>
                 (<%= score.points %>)
               <% end %>
             </div>
           <% else %>
             <div>
-              <%= score.total_count %>
+              <%= score.gross_score %>
               <% if score.points > 0 %>
                 (<%= score.points %>)
               <% end %>
@@ -67,7 +67,7 @@
     <td style="text-align:center; border-top: 1px solid lightgray;"></td>
     <% @players.each do |player| %>
       <% player_scores = @scorecard.select { |s| s.player_id == player.id } %>
-      <td style="text-align:center; border-top: 1px solid lightgray;"><%= player_scores.map(&:total_count).compact.sum %> (<%= player_stabbies[player.id] %>)</td>
+      <td style="text-align:center; border-top: 1px solid lightgray;"><%= player_scores.map(&:gross_score).compact.sum %> (<%= player_stabbies[player.id] %>)</td>
     <% end %>
   </tr>
   <tr>
