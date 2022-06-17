@@ -96,6 +96,41 @@ CREATE TABLE public.match_players (
 
 
 --
+-- Name: scores; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.scores (
+    total_count integer,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
+    putt_count integer,
+    lost_ball_count integer,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    match_id uuid DEFAULT gen_random_uuid() NOT NULL,
+    hole_id uuid DEFAULT gen_random_uuid() NOT NULL,
+    player_id uuid DEFAULT gen_random_uuid() NOT NULL
+);
+
+
+--
+-- Name: gross_stablefords; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.gross_stablefords AS
+ SELECT holes.number,
+    holes.stroke,
+    scores.total_count AS gross_score,
+    match_players.handicap,
+    ceil((GREATEST((match_players.handicap - (holes.stroke)::numeric), (0)::numeric) / (18)::numeric)) AS strokes_given,
+    scores.hole_id,
+    scores.match_id,
+    scores.player_id
+   FROM ((public.scores
+     JOIN public.holes ON ((scores.hole_id = holes.id)))
+     JOIN public.match_players USING (player_id));
+
+
+--
 -- Name: match_teams; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -150,23 +185,6 @@ CREATE TABLE public.players (
 
 CREATE TABLE public.schema_migrations (
     version character varying NOT NULL
-);
-
-
---
--- Name: scores; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.scores (
-    total_count integer,
-    created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL,
-    putt_count integer,
-    lost_ball_count integer,
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    match_id uuid DEFAULT gen_random_uuid() NOT NULL,
-    hole_id uuid DEFAULT gen_random_uuid() NOT NULL,
-    player_id uuid DEFAULT gen_random_uuid() NOT NULL
 );
 
 
@@ -392,6 +410,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220511080405'),
 ('20220616180842'),
 ('20220616192358'),
-('20220616232225');
+('20220616232225'),
+('20220617025742');
 
 
