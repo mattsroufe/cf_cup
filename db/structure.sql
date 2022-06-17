@@ -176,46 +176,19 @@ CREATE TABLE public.scores (
 
 CREATE VIEW public.scorecards AS
  WITH scores_with_adjusted_par AS (
-         SELECT scores.total_count,
-            scores.created_at,
-            scores.updated_at,
-            scores.putt_count,
-            scores.lost_ball_count,
-            scores.id,
-            scores.match_id,
-            scores.hole_id,
-            scores.player_id,
-            holes.par,
-            holes.stroke,
-            holes.meters,
+         SELECT scores.match_id,
             holes.number,
-            holes.created_at,
-            holes.updated_at,
-            holes.id,
-            holes.course_id,
-            players.first_name,
-            players.last_name,
-            players.username,
-            players.strengths,
-            players.weaknesses,
-            players.handicap_text,
-            players.handicap,
-            players.created_at,
-            players.updated_at,
-            players.best_moment,
-            players.nick_name,
-            players.home_club,
-            players.trophies,
-            players.id,
-            players.team_id,
+            scores.total_count,
+            scores.player_id,
+            scores.hole_id,
                 CASE
-                    WHEN ((holes.stroke)::numeric <= players.handicap) THEN (holes.par + 1)
-                    WHEN ((holes.stroke)::numeric <= (players.handicap - (18)::numeric)) THEN (holes.par + 2)
+                    WHEN ((holes.stroke)::numeric <= match_players.handicap) THEN (holes.par + 1)
+                    WHEN ((holes.stroke)::numeric <= (match_players.handicap - (18)::numeric)) THEN (holes.par + 2)
                     ELSE holes.par
                 END AS adjusted_par
            FROM ((public.scores
              JOIN public.holes ON ((scores.hole_id = holes.id)))
-             JOIN public.players ON ((scores.player_id = players.id)))
+             JOIN public.match_players USING (player_id))
         )
  SELECT scores_with_adjusted_par.number,
     scores_with_adjusted_par.total_count,
@@ -231,7 +204,7 @@ CREATE VIEW public.scorecards AS
             WHEN (scores_with_adjusted_par.total_count = (scores_with_adjusted_par.adjusted_par - 3)) THEN 5
             ELSE 0
         END AS points
-   FROM scores_with_adjusted_par scores_with_adjusted_par(total_count, created_at, updated_at, putt_count, lost_ball_count, id, match_id, hole_id, player_id, par, stroke, meters, number, created_at_1, updated_at_1, id_1, course_id, first_name, last_name, username, strengths, weaknesses, handicap_text, handicap, created_at_2, updated_at_2, best_moment, nick_name, home_club, trophies, id_2, team_id, adjusted_par);
+   FROM scores_with_adjusted_par;
 
 
 --

@@ -3,15 +3,20 @@ class AddScorecardView < ActiveRecord::Migration[7.0]
     ActiveRecord::Base.connection.execute "
       CREATE OR REPLACE VIEW scorecards AS
       WITH scores_with_adjusted_par AS (
-        SELECT *,
+        SELECT
+        scores.match_id,
+        holes.number,
+        scores.total_count,
+        scores.player_id,
+        scores.hole_id,
         CASE
-          WHEN holes.stroke <= players.handicap THEN holes.par + 1
-          WHEN holes.stroke <= players.handicap - 18 THEN holes.par + 2
+          WHEN holes.stroke <= match_players.handicap THEN holes.par + 1
+          WHEN holes.stroke <= match_players.handicap - 18 THEN holes.par + 2
           ELSE holes.par
         END AS adjusted_par
         FROM scores
-        JOIN holes ON hole_id = holes.id
-        JOIN players ON player_id = players.id
+        JOIN holes ON scores.hole_id = holes.id
+        JOIN match_players using(player_id)
       )
       SELECT
         number,
