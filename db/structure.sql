@@ -221,6 +221,19 @@ CREATE VIEW public.scorecards AS
 
 
 --
+-- Name: team_players; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.team_players (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    team_id uuid NOT NULL,
+    player_id uuid NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
+);
+
+
+--
 -- Name: teams; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -305,6 +318,14 @@ ALTER TABLE ONLY public.scores
 
 
 --
+-- Name: team_players team_players_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.team_players
+    ADD CONSTRAINT team_players_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: teams teams_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -324,6 +345,27 @@ CREATE UNIQUE INDEX index_match_players_on_match_id_and_player_id ON public.matc
 --
 
 CREATE INDEX index_match_players_on_player_id ON public.match_players USING btree (player_id);
+
+
+--
+-- Name: index_team_players_on_player_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_team_players_on_player_id ON public.team_players USING btree (player_id);
+
+
+--
+-- Name: index_team_players_on_team_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_team_players_on_team_id ON public.team_players USING btree (team_id);
+
+
+--
+-- Name: index_team_players_on_team_id_and_player_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_team_players_on_team_id_and_player_id ON public.team_players USING btree (team_id, player_id);
 
 
 --
@@ -406,6 +448,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220616180842'),
 ('20220616192358'),
 ('20220616232225'),
-('20220617025742');
+('20220617025742'),
+('20220617215915');
 
 
