@@ -4,9 +4,10 @@ class GrossStablefordsView < ActiveRecord::Migration[7.0]
       CREATE OR REPLACE VIEW gross_stablefords AS
         SELECT
         holes.number,
+        holes.par,
         holes.stroke,
         scores.total_count as gross_score,
-        handicap,
+        match_players.handicap,
         ceil(greatest(handicap - stroke, 0) / 18) as strokes_given,
         scores.hole_id,
         scores.match_id,
