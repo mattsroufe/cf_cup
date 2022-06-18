@@ -82,56 +82,6 @@ CREATE TABLE public.holes (
 
 
 --
--- Name: match_players; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.match_players (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    match_id uuid NOT NULL,
-    player_id uuid NOT NULL,
-    handicap numeric NOT NULL,
-    created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL
-);
-
-
---
--- Name: scores; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.scores (
-    total_count integer,
-    created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL,
-    putt_count integer,
-    lost_ball_count integer,
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    match_id uuid DEFAULT gen_random_uuid() NOT NULL,
-    hole_id uuid DEFAULT gen_random_uuid() NOT NULL,
-    player_id uuid DEFAULT gen_random_uuid() NOT NULL
-);
-
-
---
--- Name: gross_stablefords; Type: VIEW; Schema: public; Owner: -
---
-
-CREATE VIEW public.gross_stablefords AS
- SELECT holes.number,
-    holes.par,
-    holes.stroke,
-    scores.total_count AS gross_score,
-    match_players.handicap,
-    ceil((GREATEST((match_players.handicap - (holes.stroke)::numeric), (0)::numeric) / (18)::numeric)) AS strokes_given,
-    scores.hole_id,
-    scores.match_id,
-    scores.player_id
-   FROM ((public.scores
-     JOIN public.holes ON ((scores.hole_id = holes.id)))
-     JOIN public.match_players USING (player_id));
-
-
---
 -- Name: match_teams; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -190,34 +140,20 @@ CREATE TABLE public.schema_migrations (
 
 
 --
--- Name: scorecards; Type: VIEW; Schema: public; Owner: -
+-- Name: scores; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE VIEW public.scorecards AS
- WITH scores_with_adjusted_par AS (
-         SELECT gross_stablefords.match_id,
-            gross_stablefords.number,
-            gross_stablefords.gross_score,
-            gross_stablefords.player_id,
-            gross_stablefords.hole_id,
-            ((gross_stablefords.par)::numeric + gross_stablefords.strokes_given) AS adjusted_par
-           FROM public.gross_stablefords
-        )
- SELECT scores_with_adjusted_par.number,
-    scores_with_adjusted_par.gross_score,
-    scores_with_adjusted_par.adjusted_par,
-    scores_with_adjusted_par.match_id,
-    scores_with_adjusted_par.hole_id,
-    scores_with_adjusted_par.player_id,
-        CASE
-            WHEN ((scores_with_adjusted_par.gross_score)::numeric = (scores_with_adjusted_par.adjusted_par + (1)::numeric)) THEN 1
-            WHEN ((scores_with_adjusted_par.gross_score)::numeric = scores_with_adjusted_par.adjusted_par) THEN 2
-            WHEN ((scores_with_adjusted_par.gross_score)::numeric = (scores_with_adjusted_par.adjusted_par - (1)::numeric)) THEN 3
-            WHEN ((scores_with_adjusted_par.gross_score)::numeric = (scores_with_adjusted_par.adjusted_par - (2)::numeric)) THEN 4
-            WHEN ((scores_with_adjusted_par.gross_score)::numeric = (scores_with_adjusted_par.adjusted_par - (3)::numeric)) THEN 5
-            ELSE 0
-        END AS points
-   FROM scores_with_adjusted_par;
+CREATE TABLE public.scores (
+    total_count integer,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
+    putt_count integer,
+    lost_ball_count integer,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    match_id uuid DEFAULT gen_random_uuid() NOT NULL,
+    hole_id uuid DEFAULT gen_random_uuid() NOT NULL,
+    player_id uuid DEFAULT gen_random_uuid() NOT NULL
+);
 
 
 --
@@ -267,14 +203,6 @@ ALTER TABLE ONLY public.courses
 
 ALTER TABLE ONLY public.holes
     ADD CONSTRAINT holes_pkey PRIMARY KEY (id);
-
-
---
--- Name: match_players match_players_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.match_players
-    ADD CONSTRAINT match_players_pkey PRIMARY KEY (id);
 
 
 --
@@ -331,20 +259,6 @@ ALTER TABLE ONLY public.team_players
 
 ALTER TABLE ONLY public.teams
     ADD CONSTRAINT teams_pkey PRIMARY KEY (id);
-
-
---
--- Name: index_match_players_on_match_id_and_player_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_match_players_on_match_id_and_player_id ON public.match_players USING btree (match_id, player_id);
-
-
---
--- Name: index_match_players_on_player_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_match_players_on_player_id ON public.match_players USING btree (player_id);
 
 
 --
@@ -449,6 +363,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220616192358'),
 ('20220616232225'),
 ('20220617025742'),
-('20220617215915');
+('20220617215915'),
+('20220618224334');
 
 
