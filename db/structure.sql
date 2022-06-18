@@ -125,8 +125,7 @@ CREATE TABLE public.players (
     nick_name character varying,
     home_club character varying,
     trophies character varying,
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    team_id uuid DEFAULT gen_random_uuid() NOT NULL
+    id uuid DEFAULT gen_random_uuid() NOT NULL
 );
 
 
@@ -315,14 +314,6 @@ ALTER TABLE ONLY public.match_teams
 
 
 --
--- Name: players fk_rails_8880a915a5; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.players
-    ADD CONSTRAINT fk_rails_8880a915a5 FOREIGN KEY (team_id) REFERENCES public.teams(id);
-
-
---
 -- Name: matches fk_rails_e250e03790; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -364,6 +355,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220616232225'),
 ('20220617025742'),
 ('20220617215915'),
-('20220618224334');
+('20220618224334'),
+('20220618225920');
 
 
