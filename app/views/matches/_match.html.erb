@@ -7,7 +7,7 @@
         <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
       <% end %>
       <div style="display:flex; flex-direction:column; justify-content:center">
-        <%= team.players.map(&:last_name).join('/') %>
+        <%= players.map(&:last_name).join('/') %>
       </div>
       <% players[1].tap do |player| %>
         <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
@@ -22,7 +22,7 @@
         <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
       <% end %>
       <div style="display:flex; flex-direction:column; justify-content:center">
-        <%= team.name %>
+        <%= players.map(&:last_name).join('/') %>
       </div>
       <% players[1].tap do |player| %>
         <%= image_tag "#{player.username}.png", height: 64, width: 64, style: "border-radius:32px; box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)" %>
