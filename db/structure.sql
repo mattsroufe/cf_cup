@@ -234,20 +234,37 @@ CREATE VIEW public.scorecards AS
                     ELSE 0
                 END AS points
            FROM q1
+        ), q3 AS (
+         SELECT q2.team_id,
+            q2.number,
+            q2.par,
+            q2.stroke,
+            q2.strokes_given,
+            q2.gross_score,
+            q2.adjusted_par,
+            q2.match_id,
+            q2.hole_id,
+            q2.player_id,
+            q2.points,
+            max(q2.points) OVER (PARTITION BY q2.hole_id, q2.team_id ORDER BY q2.points DESC) AS team_points
+           FROM q2
         )
- SELECT q2.team_id,
-    q2.number,
-    q2.par,
-    q2.stroke,
-    q2.strokes_given,
-    q2.gross_score,
-    q2.adjusted_par,
-    q2.match_id,
-    q2.hole_id,
-    q2.player_id,
-    q2.points,
-    max(q2.points) OVER (PARTITION BY q2.hole_id, q2.team_id ORDER BY q2.points DESC) AS team_points
-   FROM q2;
+ SELECT min((q3.match_id)::text) AS match_id,
+    min((q3.hole_id)::text) AS hole_id,
+    min((q3.team_id)::text) AS team_id,
+    min(q3.gross_score) AS gross_score,
+    min(q3.points) AS points,
+    min(q3.team_points) AS team_points,
+    min(q3.par) AS par,
+    min(q3.stroke) AS stroke,
+    q3.player_id,
+    q3.number,
+    sum(q3.gross_score) AS total_score,
+    sum(q3.points) AS total_points,
+    sum(q3.team_points) AS total_team_points
+   FROM q3
+  GROUP BY ROLLUP(q3.player_id, q3.number)
+  ORDER BY q3.player_id, q3.number;
 
 
 --

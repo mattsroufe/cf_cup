@@ -19,9 +19,7 @@ class ScoresController < ApplicationController
       else
         format.html do
           @players = @match.teams.sort_by(&:id).map { |team| team.players.sort_by(&:id) }.flatten
-          @scorecard = Scorecard
-            .where(match_id: params[:match_id])
-            .order(:number, :team_id, :player_id)
+          @scorecard = Scorecard.where(match_id: params[:match_id]).order(:number)
         end
       end
     end

@@ -54,11 +54,28 @@ class AddScorecardView < ActiveRecord::Migration[7.0]
             ELSE 0
           END AS points
         FROM q1
-      )
+      ),
+      q3 as (
       SELECT
         *,
         max(points) OVER (PARTITION BY hole_id, team_id ORDER BY points DESC) as team_points
       FROM q2
+      )
+      select
+        min(match_id::text) as match_id,
+        min(hole_id::text) as hole_id,
+        min(team_id::text) as team_id,
+        min(gross_score) as gross_score,
+        min(points) as points,
+        min(team_points) as team_points,
+        min(par) as par,
+        min(stroke) as stroke,
+        player_id,
+        number,
+        sum(gross_score) as total_score,
+        sum(points) as total_points,
+        sum(team_points) as total_team_points from q3
+        group by rollup (player_id, number) order by player_id, number;
     ;"
   end
 
