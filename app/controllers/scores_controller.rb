@@ -21,7 +21,6 @@ class ScoresController < ApplicationController
         format.html do
           @players = @match.players
           @scorecard = Scorecard
-            .select("*, max(points) OVER (PARTITION BY hole_id, team_id ORDER BY points DESC) as team_points")
             .where(match_id: params[:match_id])
             .order(:number, :team_id, :player_id)
         end

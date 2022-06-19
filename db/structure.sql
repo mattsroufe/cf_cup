@@ -96,57 +96,6 @@ CREATE TABLE public.match_players (
 
 
 --
--- Name: scores; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.scores (
-    total_count integer,
-    created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL,
-    putt_count integer,
-    lost_ball_count integer,
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    match_id uuid DEFAULT gen_random_uuid() NOT NULL,
-    hole_id uuid DEFAULT gen_random_uuid() NOT NULL,
-    player_id uuid DEFAULT gen_random_uuid() NOT NULL
-);
-
-
---
--- Name: team_players; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.team_players (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    team_id uuid NOT NULL,
-    player_id uuid NOT NULL,
-    created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL
-);
-
-
---
--- Name: gross_stablefords; Type: VIEW; Schema: public; Owner: -
---
-
-CREATE VIEW public.gross_stablefords AS
- SELECT holes.number,
-    holes.par,
-    holes.stroke,
-    scores.total_count AS gross_score,
-    match_players.handicap,
-    ceil((GREATEST((match_players.handicap - (holes.stroke)::numeric), (0)::numeric) / (18)::numeric)) AS strokes_given,
-    scores.hole_id,
-    scores.match_id,
-    scores.player_id,
-    team_players.team_id
-   FROM (((public.scores
-     JOIN public.holes ON ((scores.hole_id = holes.id)))
-     JOIN public.match_players USING (player_id))
-     JOIN public.team_players USING (player_id));
-
-
---
 -- Name: match_teams; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -204,42 +153,101 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: scores; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.scores (
+    total_count integer,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
+    putt_count integer,
+    lost_ball_count integer,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    match_id uuid DEFAULT gen_random_uuid() NOT NULL,
+    hole_id uuid DEFAULT gen_random_uuid() NOT NULL,
+    player_id uuid DEFAULT gen_random_uuid() NOT NULL
+);
+
+
+--
+-- Name: team_players; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.team_players (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    team_id uuid NOT NULL,
+    player_id uuid NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
+);
+
+
+--
 -- Name: scorecards; Type: VIEW; Schema: public; Owner: -
 --
 
 CREATE VIEW public.scorecards AS
- WITH scores_with_adjusted_par AS (
-         SELECT gross_stablefords.match_id,
-            gross_stablefords.number,
-            gross_stablefords.gross_score,
-            gross_stablefords.player_id,
-            gross_stablefords.hole_id,
-            gross_stablefords.par,
-            gross_stablefords.stroke,
-            gross_stablefords.strokes_given,
-            ((gross_stablefords.par)::numeric + gross_stablefords.strokes_given) AS adjusted_par,
-            gross_stablefords.team_id
-           FROM public.gross_stablefords
+ WITH q0 AS (
+         SELECT holes.number,
+            holes.par,
+            holes.stroke,
+            scores.total_count AS gross_score,
+            match_players.handicap,
+            ceil((GREATEST((match_players.handicap - (holes.stroke)::numeric), (0)::numeric) / (18)::numeric)) AS strokes_given,
+            scores.hole_id,
+            scores.match_id,
+            scores.player_id,
+            team_players.team_id
+           FROM (((public.scores
+             JOIN public.holes ON ((scores.hole_id = holes.id)))
+             JOIN public.match_players USING (player_id))
+             JOIN public.team_players USING (player_id))
+        ), q1 AS (
+         SELECT q0.match_id,
+            q0.number,
+            q0.gross_score,
+            q0.player_id,
+            q0.hole_id,
+            q0.par,
+            q0.stroke,
+            q0.strokes_given,
+            ((q0.par)::numeric + q0.strokes_given) AS adjusted_par,
+            q0.team_id
+           FROM q0
+        ), q2 AS (
+         SELECT q1.team_id,
+            q1.number,
+            q1.par,
+            q1.stroke,
+            q1.strokes_given,
+            q1.gross_score,
+            q1.adjusted_par,
+            q1.match_id,
+            q1.hole_id,
+            q1.player_id,
+                CASE
+                    WHEN ((q1.gross_score)::numeric = (q1.adjusted_par + (1)::numeric)) THEN 1
+                    WHEN ((q1.gross_score)::numeric = q1.adjusted_par) THEN 2
+                    WHEN ((q1.gross_score)::numeric = (q1.adjusted_par - (1)::numeric)) THEN 3
+                    WHEN ((q1.gross_score)::numeric = (q1.adjusted_par - (2)::numeric)) THEN 4
+                    WHEN ((q1.gross_score)::numeric = (q1.adjusted_par - (3)::numeric)) THEN 5
+                    ELSE 0
+                END AS points
+           FROM q1
         )
- SELECT scores_with_adjusted_par.team_id,
-    scores_with_adjusted_par.number,
-    scores_with_adjusted_par.par,
-    scores_with_adjusted_par.stroke,
-    scores_with_adjusted_par.strokes_given,
-    scores_with_adjusted_par.gross_score,
-    scores_with_adjusted_par.adjusted_par,
-    scores_with_adjusted_par.match_id,
-    scores_with_adjusted_par.hole_id,
-    scores_with_adjusted_par.player_id,
-        CASE
-            WHEN ((scores_with_adjusted_par.gross_score)::numeric = (scores_with_adjusted_par.adjusted_par + (1)::numeric)) THEN 1
-            WHEN ((scores_with_adjusted_par.gross_score)::numeric = scores_with_adjusted_par.adjusted_par) THEN 2
-            WHEN ((scores_with_adjusted_par.gross_score)::numeric = (scores_with_adjusted_par.adjusted_par - (1)::numeric)) THEN 3
-            WHEN ((scores_with_adjusted_par.gross_score)::numeric = (scores_with_adjusted_par.adjusted_par - (2)::numeric)) THEN 4
-            WHEN ((scores_with_adjusted_par.gross_score)::numeric = (scores_with_adjusted_par.adjusted_par - (3)::numeric)) THEN 5
-            ELSE 0
-        END AS points
-   FROM scores_with_adjusted_par;
+ SELECT q2.team_id,
+    q2.number,
+    q2.par,
+    q2.stroke,
+    q2.strokes_given,
+    q2.gross_score,
+    q2.adjusted_par,
+    q2.match_id,
+    q2.hole_id,
+    q2.player_id,
+    q2.points,
+    max(q2.points) OVER (PARTITION BY q2.hole_id, q2.team_id ORDER BY q2.points DESC) AS team_points
+   FROM q2;
 
 
 --
@@ -456,7 +464,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220616180842'),
 ('20220616192358'),
 ('20220616232225'),
-('20220617025742'),
 ('20220617215915'),
 ('20220618224334'),
 ('20220618225920');
