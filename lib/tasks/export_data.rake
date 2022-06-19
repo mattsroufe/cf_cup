@@ -1,7 +1,7 @@
 namespace :export do
   desc "Export users" 
   task :export_to_seeds => :environment do
-    klasses = [Score, MatchTeam, TeamPlayer, Team, Player, Match, Hole, Course]
+    klasses = [Score, MatchTeam, TeamPlayer, Team, MatchPlayer, Player, Match, Hole, Course]
     klasses.each do |klass|
       puts "#{klass.name}.delete_all"
     end
