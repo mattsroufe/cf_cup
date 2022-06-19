@@ -389,6 +389,13 @@ CREATE INDEX index_match_players_on_player_id ON public.match_players USING btre
 
 
 --
+-- Name: index_scores_on_match_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_scores_on_match_id ON public.scores USING btree (match_id);
+
+
+--
 -- Name: index_team_players_on_player_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -483,6 +490,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220616232225'),
 ('20220617215915'),
 ('20220618224334'),
-('20220618225920');
+('20220618225920'),
+('20220619225842');
 
 
