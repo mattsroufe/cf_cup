@@ -27,7 +27,9 @@
       <% end %>
     </tr>
   </thead>
-  <% @match.course.holes.order(:number).each do |hole| %>
+<pre><%= JSON.pretty_generate(@scorecard.order(:number).as_json) %></pre>
+  <%# @match.course.holes.order(:number).each do |hole| %>
+  <% [].each do |hole| %>
     <tr>
       <td style="text-align:center; border-top: 1px solid lightgray;"><%= link_to hole.number, new_score_path(score: { match_id: @match.id, hole_id: hole.id }) %></td>
       <td style="text-align:center; border-top: 1px solid lightgray;"><%= hole.stroke %></td>
