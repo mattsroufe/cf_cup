@@ -1,7 +1,6 @@
 class ScoresController < ApplicationController
   before_action :set_score, only: %i[ show edit update destroy ]
 
-  # GET /scores or /scores.json
   def index
     @match = Match.find(params[:match_id])
 
@@ -28,23 +27,19 @@ class ScoresController < ApplicationController
     end
  end
 
-  # GET /scores/1 or /scores/1.json
   def show
   end
 
-  # GET /scores/new
   def new
-    @match = Match.where(id: score_params[:match_id]).includes(:teams).first!
+    @match = Match.where(id: score_params[:match_id]).includes(teams: :players).first!
     @hole = Hole.find(score_params[:hole_id])
-    @players = Player.where(team_id: @match.teams.pluck(:id))
+    @players = @match.players
     @scores = Score.where(match_id: @match.id, hole_id: @hole.id, player_id: @players.ids)
   end
 
-  # GET /scores/1/edit
   def edit
   end
 
-  # POST /scores or /scores.json
   def create
     @score = Score.new(score_params)
 
@@ -59,7 +54,6 @@ class ScoresController < ApplicationController
     end
   end
 
-  # PATCH/PUT /scores/1 or /scores/1.json
   def update
     respond_to do |format|
       if @score.update(score_params)
@@ -72,7 +66,6 @@ class ScoresController < ApplicationController
     end
   end
 
-  # DELETE /scores/1 or /scores/1.json
   def destroy
     @score.destroy
 
