@@ -1,5 +1,5 @@
 class CreateMatchPlayers < ActiveRecord::Migration[7.0]
-  def change
+  def up
     create_table :match_players, id: :uuid do |t|
       t.column :match_id, :uuid, null: false
       t.column :player_id, :uuid, null: false
@@ -10,6 +10,10 @@ class CreateMatchPlayers < ActiveRecord::Migration[7.0]
     end
 
     add_index :match_players, [:match_id, :player_id], unique: true
+    add_index :match_players, :match_id
     add_index :match_players, :player_id
+  end
+
+  def down
   end
 end
