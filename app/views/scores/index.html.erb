@@ -1,5 +1,3 @@
-<% team_scores = @match.teams.ids.zip([0,0]).to_h %>
-<% player_stabbies = @players.ids.zip([0,0,0,0]).to_h %>
 <h1 class="logo text-center my-3">Scorecard</h1>
   <%= render 'nav' %>
  
@@ -27,21 +25,16 @@
       <% end %>
     </tr>
   </thead>
-<pre><%= JSON.pretty_generate(@scorecard.order(:number).as_json) %></pre>
-  <%# @match.course.holes.order(:number).each do |hole| %>
-  <% [].each do |hole| %>
-    <tr>
-      <td style="text-align:center; border-top: 1px solid lightgray;"><%= link_to hole.number, new_score_path(score: { match_id: @match.id, hole_id: hole.id }) %></td>
-      <td style="text-align:center; border-top: 1px solid lightgray;"><%= hole.stroke %></td>
-      <td style="text-align:center; border-top: 1px solid lightgray;"><%= hole.par %></td>
-      <% hole_scores = @scorecard.group_by(&:number) %>
-      <% @players.each do |player| %>
-        <td style="text-align:center; border-top: 1px solid lightgray;">
-          <% score = hole_scores[hole.number].find { |s| s.player_id == player.id } %>
-          <% team_scores_for_hole = hole_scores[hole.number].select { |s| s.player_id.in? player.team.players.ids } %>
-          <% highest_team_score = team_scores_for_hole.sort_by(&:points).last %>
 
-          <% if score == highest_team_score %>
+  <% @scorecard.group_by(&:number).each do |number, scores| %>
+    <% first_score = scores.first %>
+    <tr>
+      <td style="text-align:center; border-top: 1px solid lightgray;"><%= link_to number, new_score_path(score: { match_id: @match.id, hole_id: first_score.hole_id }) %></td>
+      <td style="text-align:center; border-top: 1px solid lightgray;"><%= first_score.stroke %></td>
+      <td style="text-align:center; border-top: 1px solid lightgray;"><%= first_score.par %></td>
+      <% scores.each do |score| %>
+        <td style="text-align:center; border-top: 1px solid lightgray;">
+          <% if false %>
             <% team_scores[player.team_id] += score.points %>
             <% player_stabbies[player.id] += score.points %>
             <div class="fw-bold">
@@ -67,7 +60,8 @@
     <td style="text-align:center; border-top: 1px solid lightgray;"></td>
     <td style="text-align:center; border-top: 1px solid lightgray;"></td>
     <td style="text-align:center; border-top: 1px solid lightgray;"></td>
-    <% @players.each do |player| %>
+    <%# @players.each do |player| %>
+    <% [].each do |player| %>
       <% player_scores = @scorecard.select { |s| s.player_id == player.id } %>
       <td style="text-align:center; border-top: 1px solid lightgray;"><%= player_scores.map(&:gross_score).compact.sum %> (<%= player_stabbies[player.id] %>)</td>
     <% end %>
@@ -76,7 +70,8 @@
     <td style="text-align:center; border-top: 1px solid lightgray;">Total</td>
     <td style="text-align:center; border-top: 1px solid lightgray;"></td>
     <td style="text-align:center; border-top: 1px solid lightgray;"></td>
-    <% @match.teams.order(:id).each do |team| %>
+    <%# @match.teams.order(:id).each do |team| %>
+    <% [].each do |team| %>
       <td colspan="2" style="text-align:center; border-top: 1px solid lightgray;">
         <%= team_scores[team.id] %>
       </td>

@@ -113,6 +113,19 @@ CREATE TABLE public.scores (
 
 
 --
+-- Name: team_players; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.team_players (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    team_id uuid NOT NULL,
+    player_id uuid NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
+);
+
+
+--
 -- Name: gross_stablefords; Type: VIEW; Schema: public; Owner: -
 --
 
@@ -125,10 +138,12 @@ CREATE VIEW public.gross_stablefords AS
     ceil((GREATEST((match_players.handicap - (holes.stroke)::numeric), (0)::numeric) / (18)::numeric)) AS strokes_given,
     scores.hole_id,
     scores.match_id,
-    scores.player_id
-   FROM ((public.scores
+    scores.player_id,
+    team_players.team_id
+   FROM (((public.scores
      JOIN public.holes ON ((scores.hole_id = holes.id)))
-     JOIN public.match_players USING (player_id));
+     JOIN public.match_players USING (player_id))
+     JOIN public.team_players USING (player_id));
 
 
 --
@@ -199,10 +214,18 @@ CREATE VIEW public.scorecards AS
             gross_stablefords.gross_score,
             gross_stablefords.player_id,
             gross_stablefords.hole_id,
-            ((gross_stablefords.par)::numeric + gross_stablefords.strokes_given) AS adjusted_par
+            gross_stablefords.par,
+            gross_stablefords.stroke,
+            gross_stablefords.strokes_given,
+            ((gross_stablefords.par)::numeric + gross_stablefords.strokes_given) AS adjusted_par,
+            gross_stablefords.team_id
            FROM public.gross_stablefords
         )
- SELECT scores_with_adjusted_par.number,
+ SELECT scores_with_adjusted_par.team_id,
+    scores_with_adjusted_par.number,
+    scores_with_adjusted_par.par,
+    scores_with_adjusted_par.stroke,
+    scores_with_adjusted_par.strokes_given,
     scores_with_adjusted_par.gross_score,
     scores_with_adjusted_par.adjusted_par,
     scores_with_adjusted_par.match_id,
@@ -217,19 +240,6 @@ CREATE VIEW public.scorecards AS
             ELSE 0
         END AS points
    FROM scores_with_adjusted_par;
-
-
---
--- Name: team_players; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.team_players (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    team_id uuid NOT NULL,
-    player_id uuid NOT NULL,
-    created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL
-);
 
 
 --

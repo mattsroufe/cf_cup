@@ -4,26 +4,6 @@ class ScoresController < ApplicationController
   # GET /scores or /scores.json
   def index
     @match = Match.find(params[:match_id])
-    @model = Scorecard.select("
-      hole_id,
-      number,
-      json_agg(
-        json_build_object(
-          player_id,
-          json_build_object(
-            'total_count', total_count,
-            'adjusted_par', adjusted_par
-          )
-        )
-      ) as scores
-    ".squish)
-    .where(
-      match_id: params[:match_id]
-    ).order(:number)
-    .group(
-      :hole_id,
-      :number
-    )
 
     respond_to do |format|
       if params[:hole_number]
@@ -40,7 +20,10 @@ class ScoresController < ApplicationController
       else
         format.html do
           @players = @match.players
-          @scorecard = Scorecard.where(match_id: params[:match_id])
+          @scorecard = Scorecard
+            .select("*, max(points) OVER (PARTITION BY hole_id, team_id ORDER BY points DESC) as team_points")
+            .where(match_id: params[:match_id])
+            .order(:number, :team_id, :player_id)
         end
       end
     end

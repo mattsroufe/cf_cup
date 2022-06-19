@@ -11,10 +11,12 @@ class GrossStablefordsView < ActiveRecord::Migration[7.0]
         ceil(greatest(handicap - stroke, 0) / 18) as strokes_given,
         scores.hole_id,
         scores.match_id,
-        scores.player_id
+        scores.player_id,
+        team_players.team_id
         FROM scores
         JOIN holes ON scores.hole_id = holes.id
         JOIN match_players using(player_id)
+        JOIN team_players using(player_id)
     ;"
   end
 

@@ -9,16 +9,24 @@ class AddScorecardView < ActiveRecord::Migration[7.0]
           gross_score,
           player_id,
           hole_id,
-          par + strokes_given as adjusted_par
+          par,
+          stroke,
+          strokes_given,
+          par + strokes_given as adjusted_par,
+          team_id
         FROM gross_stablefords
       )
       SELECT
+        team_id,
         number,
+        par,
+        stroke,
+        strokes_given,
         gross_score,
         adjusted_par,
         match_id,
         hole_id,
-        player_id,
+        scores_with_adjusted_par.player_id,
         CASE
           WHEN gross_score = adjusted_par + 1 THEN 1
           WHEN gross_score = adjusted_par THEN 2
