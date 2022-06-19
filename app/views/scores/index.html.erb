@@ -60,20 +60,17 @@
     <td style="text-align:center; border-top: 1px solid lightgray;"></td>
     <td style="text-align:center; border-top: 1px solid lightgray;"></td>
     <td style="text-align:center; border-top: 1px solid lightgray;"></td>
-    <%# @players.each do |player| %>
-    <% [].each do |player| %>
-      <% player_scores = @scorecard.select { |s| s.player_id == player.id } %>
-      <td style="text-align:center; border-top: 1px solid lightgray;"><%= player_scores.map(&:gross_score).compact.sum %> (<%= player_stabbies[player.id] %>)</td>
+    <% @scorecard.group_by(&:player_id).values.each do |player_scores| %>
+      <td style="text-align:center; border-top: 1px solid lightgray;"><%= player_scores.map(&:gross_score).compact.sum %> (<%= player_scores.map(&:points).compact.sum %>)</td>
     <% end %>
   </tr>
   <tr>
     <td style="text-align:center; border-top: 1px solid lightgray;">Total</td>
     <td style="text-align:center; border-top: 1px solid lightgray;"></td>
     <td style="text-align:center; border-top: 1px solid lightgray;"></td>
-    <%# @match.teams.order(:id).each do |team| %>
-    <% [].each do |team| %>
+    <% @scorecard.group_by(&:team_id).values.map { |arr| arr.group_by(&:player_id).first.last.sum(&:team_points) }.each do |team_scores| %>
       <td colspan="2" style="text-align:center; border-top: 1px solid lightgray;">
-        <%= team_scores[team.id] %>
+        <%= team_scores %>
       </td>
     <% end %>
   </tr>
