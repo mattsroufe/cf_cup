@@ -189,6 +189,37 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: scorecards; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.scorecards AS
+ WITH scores_with_adjusted_par AS (
+         SELECT gross_stablefords.match_id,
+            gross_stablefords.number,
+            gross_stablefords.gross_score,
+            gross_stablefords.player_id,
+            gross_stablefords.hole_id,
+            ((gross_stablefords.par)::numeric + gross_stablefords.strokes_given) AS adjusted_par
+           FROM public.gross_stablefords
+        )
+ SELECT scores_with_adjusted_par.number,
+    scores_with_adjusted_par.gross_score,
+    scores_with_adjusted_par.adjusted_par,
+    scores_with_adjusted_par.match_id,
+    scores_with_adjusted_par.hole_id,
+    scores_with_adjusted_par.player_id,
+        CASE
+            WHEN ((scores_with_adjusted_par.gross_score)::numeric = (scores_with_adjusted_par.adjusted_par + (1)::numeric)) THEN 1
+            WHEN ((scores_with_adjusted_par.gross_score)::numeric = scores_with_adjusted_par.adjusted_par) THEN 2
+            WHEN ((scores_with_adjusted_par.gross_score)::numeric = (scores_with_adjusted_par.adjusted_par - (1)::numeric)) THEN 3
+            WHEN ((scores_with_adjusted_par.gross_score)::numeric = (scores_with_adjusted_par.adjusted_par - (2)::numeric)) THEN 4
+            WHEN ((scores_with_adjusted_par.gross_score)::numeric = (scores_with_adjusted_par.adjusted_par - (3)::numeric)) THEN 5
+            ELSE 0
+        END AS points
+   FROM scores_with_adjusted_par;
+
+
+--
 -- Name: team_players; Type: TABLE; Schema: public; Owner: -
 --
 
