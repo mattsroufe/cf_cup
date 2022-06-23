@@ -11,11 +11,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto+Condensed:wght@300;400&display=swap" rel="stylesheet">
     <%= stylesheet_link_tag "bootstrap.min.css" %>
-  </head>
+  <link rel="manifest" href="/manifest.json" />
+<meta name="apple-mobile-web-app-capable" content="yes"></head>
 
   <body  ontouchstart="">
     <%= yield %>
     <%= javascript_include_tag "bootstrap.min" %>
+    <%= javascript_include_tag "application" %>
     <%= stylesheet_link_tag "application" %>
   </body>
 </html>

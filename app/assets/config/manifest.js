@@ -3,3 +3,4 @@
 //= link_directory ../stylesheets .css
 //= link bootstrap.min.css
 //= link bootstrap.min.js
+//= link application.js
